@@ -83,7 +83,25 @@ jobs:
               $env:BOREAL_CONSTRUCTOR_PROFILE_CHANNEL_URL = $channel
             }
             node tools/sign-boreal-profile-manifest.cjs "$root/manifest.json" "$root/stable.json"
-            gh release upload $env:RELEASE_TAG $pack "$root/stable.json"
+            $release = gh release view $env:RELEASE_TAG --json assets | ConvertFrom-Json
+            $existingNames = @($release.assets | ForEach-Object { $_.name })
+            $verifyDir = Join-Path $env:RUNNER_TEMP 'boreal-existing-assets'
+            New-Item -ItemType Directory -Force -Path $verifyDir | Out-Null
+            $upload = @()
+            foreach ($candidate in @($pack, "$root/stable.json")) {
+              $name = [System.IO.Path]::GetFileName($candidate)
+              if ($existingNames -contains $name) {
+                gh release download $env:RELEASE_TAG --pattern $name --dir $verifyDir
+                $existingPath = Join-Path $verifyDir $name
+                $expectedHash = (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash
+                $existingHash = (Get-FileHash -LiteralPath $existingPath -Algorithm SHA256).Hash
+                if ($expectedHash -ne $existingHash) { throw "El asset inmutable existente $name difiere del perfil verificado." }
+              } else {
+                $upload += $candidate
+              }
+            }
+            if ($upload.Count -gt 0) { gh release upload $env:RELEASE_TAG @upload }
+            if ($existingNames -contains 'profile-input.zip') { gh release delete-asset $env:RELEASE_TAG profile-input.zip --yes }
             "SIGNED_MANIFEST_PATH=$root/stable.json" | Out-File $env:GITHUB_ENV -Encoding utf8 -Append
           } finally {
             Remove-Item -LiteralPath $keyPath -Force -ErrorAction SilentlyContinue
