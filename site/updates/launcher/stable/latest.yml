@@ -1,0 +1,8 @@
+version: 0.1.4
+files:
+  - url: https://github.com/juanizuq123-cmyk/GDC7-Launcher/releases/download/launcher-v0.1.4/GDC7-Launcher-0.1.4-x64-setup.exe
+    sha512: 6fvhGDyQVTxEZREeZUriaN9eo5n3oFq05wy186N2aWTUCFFXgyQIdYvJ8BI+gIvdcyfrz0Dl1G+572zTyvM9hw==
+    size: 173951832
+path: GDC7-Launcher-0.1.4-x64-setup.exe
+sha512: 6fvhGDyQVTxEZREeZUriaN9eo5n3oFq05wy186N2aWTUCFFXgyQIdYvJ8BI+gIvdcyfrz0Dl1G+572zTyvM9hw==
+releaseDate: 2026-10-24T20:31:30.262Z
