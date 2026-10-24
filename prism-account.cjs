@@ -48,7 +48,8 @@ class PrismError extends Error {
       CONSTRUCTOR_INSTANCE: 'Primero instalá Boreal Constructor desde el launcher.',
       PACK: 'El paquete del perfil no está disponible en una carpeta segura.',
       SPAWN: 'Windows no pudo abrir Prism. Revisá permisos y antivirus.',
-      EXIT: 'Prism terminó con un error. Consultá el mensaje que mostró la aplicación.'
+      EXIT: 'Prism terminó con un error. Consultá el mensaje que mostró la aplicación.',
+      IMPORT_TIMEOUT: 'Prism no confirmó la instalación de Boreal. Dejá terminar la importación y volvé a intentarlo.'
     };
     super(messages[code] || messages.ENGINE);
     this.code = Object.hasOwn(messages, code) ? code : 'ENGINE';
@@ -342,6 +343,22 @@ class PrismAccountBridge extends EventEmitter {
     return matches[0] || null;
   }
 
+  async waitForImportedBorealProfile(eventId, timeoutMs = 120000) {
+    const findProfile = eventId === BOREAL_PROFILE.eventId
+      ? () => this.findBorealProfile()
+      : eventId === CONSTRUCTOR_PROFILE.eventId
+        ? () => this.findBorealConstructorProfile()
+        : null;
+    if (!findProfile) return null;
+    const deadline = Date.now() + timeoutMs;
+    do {
+      const profile = await findProfile();
+      if (profile) return profile;
+      if (Date.now() >= deadline) return null;
+      await new Promise(resolve => setTimeout(resolve, 500));
+    } while (true);
+  }
+
   async instancesDirectory() {
     if (!this.userData) throw new PrismError('PROFILE');
     const dataRoot = await this.configure(this.userData);
@@ -407,7 +424,14 @@ class PrismAccountBridge extends EventEmitter {
       this.emitState();
       const result = await closed;
       if (result.code !== 0 || result.signal) this.state = { status: 'error', error: new PrismError('EXIT').message, pid: null, mode, ...eventState };
-      else this.state = { status: 'closed', error: null, pid: null, mode, ...eventState };
+      else if (mode === 'import' && [BOREAL_PROFILE.eventId, CONSTRUCTOR_PROFILE.eventId].includes(eventId)) {
+        this.state = { status: 'running', error: null, pid: null, mode, ...eventState };
+        this.emitState();
+        const installed = await this.waitForImportedBorealProfile(eventId);
+        this.state = installed
+          ? { status: 'closed', error: null, pid: null, mode, ...eventState }
+          : { status: 'error', error: new PrismError('IMPORT_TIMEOUT').message, pid: null, mode, ...eventState };
+      } else this.state = { status: 'closed', error: null, pid: null, mode, ...eventState };
     } catch (error) {
       this.state = { status: 'error', error: error instanceof PrismError ? error.message : new PrismError('ENGINE').message, pid: null, mode, ...eventState };
     } finally {

@@ -1,7 +1,7 @@
 {
   "name": "gdc7-event-launcher",
   "productName": "GDC7 Launcher",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Launcher local para eventos independientes de Minecraft",
   "private": true,
   "type": "commonjs",
