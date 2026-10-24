@@ -22,6 +22,9 @@ concurrency:
 jobs:
   release:
     runs-on: windows-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GDC7_LAUNCHER_SIGNING_KEY: ${{ secrets.GDC7_LAUNCHER_SIGNING_KEY }}
@@ -98,6 +101,3 @@ jobs:
       - name: Deploy Pages
         uses: actions/deploy-pages@v4
         id: deployment
-        environment:
-          name: github-pages
-          url: ${{ steps.deployment.outputs.page_url }}

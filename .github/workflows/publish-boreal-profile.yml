@@ -3,6 +3,12 @@ name: Publish signed Boreal profile
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing Boreal profile release tag to publish
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -15,12 +21,15 @@ concurrency:
 
 jobs:
   publish:
-    if: startsWith(github.event.release.tag_name, 'estacion-boreal-') || startsWith(github.event.release.tag_name, 'boreal-constructor-')
+    if: startsWith(github.event.release.tag_name, 'estacion-boreal-') || startsWith(github.event.release.tag_name, 'boreal-constructor-') || startsWith(inputs.release_tag, 'estacion-boreal-') || startsWith(inputs.release_tag, 'boreal-constructor-')
     runs-on: windows-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       ESTACION_BOREAL_PROFILE_SIGNING_KEY: ${{ secrets.ESTACION_BOREAL_PROFILE_SIGNING_KEY }}
-      RELEASE_TAG: ${{ github.event.release.tag_name }}
+      RELEASE_TAG: ${{ github.event.release.tag_name || inputs.release_tag }}
       RELEASE_REPOSITORY: ${{ github.repository }}
       REPOSITORY_OWNER: ${{ github.repository_owner }}
       REPOSITORY_NAME: ${{ github.event.repository.name }}
@@ -94,6 +103,3 @@ jobs:
       - name: Deploy signed profile catalog
         uses: actions/deploy-pages@v4
         id: deployment
-        environment:
-          name: github-pages
-          url: ${{ steps.deployment.outputs.page_url }}

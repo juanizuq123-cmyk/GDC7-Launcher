@@ -17,6 +17,9 @@ jobs:
   publish:
     if: startsWith(github.event.release.tag_name, 'gdc7-profile-')
     runs-on: windows-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GDC7_PROFILE_SIGNING_KEY: ${{ secrets.GDC7_PROFILE_SIGNING_KEY }}
@@ -86,6 +89,3 @@ jobs:
       - name: Deploy Pages
         uses: actions/deploy-pages@v4
         id: deployment
-        environment:
-          name: github-pages
-          url: ${{ steps.deployment.outputs.page_url }}
