@@ -46,7 +46,7 @@ class PrismError extends Error {
       INSTANCE: 'Primero instalá el perfil GDC7 desde Prism.',
       BOREAL_INSTANCE: 'Primero instalá el perfil verificado de Estación Boreal desde el launcher.',
       CONSTRUCTOR_INSTANCE: 'Primero instalá Boreal Constructor desde el launcher.',
-      PACK: 'El archivo del perfil GDC7 no está disponible en esta copia del launcher.',
+      PACK: 'El paquete del perfil no está disponible en una carpeta segura.',
       SPAWN: 'Windows no pudo abrir Prism. Revisá permisos y antivirus.',
       EXIT: 'Prism terminó con un error. Consultá el mensaje que mostró la aplicación.'
     };
@@ -373,8 +373,16 @@ class PrismAccountBridge extends EventEmitter {
       const dataRoot = await this.configure(this.userData);
       const selectedPack = mode === 'import' ? value || this.packFile : null;
       if (mode === 'import') {
-        const relative = path.relative(dataRoot, path.resolve(selectedPack));
-        if (!path.isAbsolute(selectedPack) || selectedPack !== this.packFile && (relative === '..' || relative.startsWith(`..${path.sep}`) || path.isAbsolute(relative))) throw new PrismError('PACK');
+        const selectedPath = path.resolve(selectedPack);
+        const isInside = root => {
+          const relative = path.relative(path.resolve(root), selectedPath);
+          return relative !== '..' && !relative.startsWith(`..${path.sep}`) && !path.isAbsolute(relative);
+        };
+        const isBundledPack = selectedPack === this.packFile;
+        const isInsidePrism = isInside(dataRoot);
+        const isVerifiedBorealCache = [BOREAL_PROFILE.eventId, CONSTRUCTOR_PROFILE.eventId].includes(eventId)
+          && isInside(path.join(this.userData, 'profiles', eventId, 'downloads'));
+        if (!path.isAbsolute(selectedPack) || !isBundledPack && !isInsidePrism && !isVerifiedBorealCache) throw new PrismError('PACK');
         const pack = await fs.lstat(selectedPack);
         if (!pack.isFile() || pack.isSymbolicLink() || pack.nlink !== 1) throw new PrismError('PACK');
       }
