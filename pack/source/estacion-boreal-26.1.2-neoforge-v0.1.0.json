@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "eventId": "estacion-boreal",
+  "id": "estacion-boreal-neoforge-client",
+  "version": "0.1.0",
+  "auditedOn": "2026-10-24",
+  "target": {
+    "minecraft": "26.1.2",
+    "loader": "neoforge",
+    "loaderVersion": "26.1.2.95",
+    "javaMajor": 25,
+    "installSide": "client"
+  },
+  "targetSources": {
+    "minecraftAndNeoForge": "C:/Minecraft/EstacionBoreal/gradle.properties and build.gradle",
+    "java": "C:/Minecraft/EstacionBoreal/build.gradle toolchain languageVersion",
+    "modMetadata": "C:/Minecraft/EstacionBoreal/build/resources/main/META-INF/neoforge.mods.toml"
+  },
+  "mods": [
+    {
+      "modId": "borealexpedition",
+      "name": "Estación Boreal",
+      "version": "0.1.0",
+      "projectSide": {
+        "client": "required",
+        "server": "required"
+      },
+      "dependencies": [
+        {
+          "modId": "minecraft",
+          "versionRange": "[26.1.2]",
+          "side": "BOTH"
+        },
+        {
+          "modId": "neoforge",
+          "versionRange": "[26.1.2.95,)",
+          "side": "BOTH"
+        }
+      ],
+      "file": {
+        "filename": "borealexpedition-0.1.0.jar",
+        "source": "C:/Minecraft/EstacionBoreal/build/libs/borealexpedition-0.1.0.jar",
+        "size": 557049,
+        "sha256": "724911bf152710212cfc5f23561cf0467d56aa9882e7a0de2058e7903ad9bc84"
+      }
+    }
+  ],
+  "pack": {
+    "filename": "Estacion-Boreal-Client-0.1.0.mrpack",
+    "size": 539267,
+    "sha256": "ed73ce0ed47f00203068f5ffe52336c33c5d337c480d212f084fbb4baac61c15",
+    "minecraft": "26.1.2",
+    "neoforge": "26.1.2.95"
+  },
+  "verification": {
+    "projectGradleManifestConfirmed": true,
+    "modLoaderMetadataInspected": true,
+    "requiredDependencyClosureChecked": true,
+    "gdc7GameplayModIncluded": false,
+    "serverOnlyFilesIncludedInClientPack": false,
+    "testedInMinecraft": false
+  }
+}

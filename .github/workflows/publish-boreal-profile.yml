@@ -1,0 +1,99 @@
+name: Publish signed Boreal profile
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: boreal-profile-pages-stable
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: startsWith(github.event.release.tag_name, 'estacion-boreal-') || startsWith(github.event.release.tag_name, 'boreal-constructor-')
+    runs-on: windows-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      ESTACION_BOREAL_PROFILE_SIGNING_KEY: ${{ secrets.ESTACION_BOREAL_PROFILE_SIGNING_KEY }}
+      RELEASE_TAG: ${{ github.event.release.tag_name }}
+      RELEASE_REPOSITORY: ${{ github.repository }}
+      REPOSITORY_OWNER: ${{ github.repository_owner }}
+      REPOSITORY_NAME: ${{ github.event.repository.name }}
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+    steps:
+      - name: Checkout publisher
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Check version and signing secret
+        shell: pwsh
+        run: |
+          if ($env:RELEASE_TAG -notmatch '^(estacion-boreal|boreal-constructor)-(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-[0-9A-Za-z.-]+)?$') { throw 'El tag debe ser estacion-boreal-<versión> o boreal-constructor-<versión>.' }
+          if ($env:RELEASE_REPOSITORY -match '(?i)gdc7') { throw 'El canal Boreal requiere un repositorio dedicado cuyo nombre no contenga GDC7.' }
+          if ([string]::IsNullOrWhiteSpace($env:ESTACION_BOREAL_PROFILE_SIGNING_KEY)) { throw 'Falta ESTACION_BOREAL_PROFILE_SIGNING_KEY en los secretos del repositorio.' }
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Download and verify profile input
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path work/profile-input | Out-Null
+          gh release download $env:RELEASE_TAG --pattern 'profile-input.zip' --dir work/profile-input
+          Expand-Archive -LiteralPath 'work/profile-input/profile-input.zip' -DestinationPath 'work/profile-input/extracted' -Force
+          $root = 'work/profile-input/extracted'
+          $manifest = Get-Content "$root/manifest.json" -Raw | ConvertFrom-Json
+          $pack = Join-Path $root $manifest.installPack.filename
+          node scripts/verify-boreal-profile-release.cjs "$root/manifest.json" $pack $env:RELEASE_TAG
+          "PROFILE_EVENT_ID=$($manifest.eventId)" | Out-File $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Sign stable manifest and upload immutable assets
+        shell: pwsh
+        run: |
+          $channel = "https://$env:REPOSITORY_OWNER.github.io/$env:REPOSITORY_NAME/channels/$env:PROFILE_EVENT_ID/stable.json"
+          $env:ESTACION_BOREAL_PROFILE_CHANNEL_URL = $channel
+          $env:BOREAL_CONSTRUCTOR_PROFILE_CHANNEL_URL = $channel
+          $env:ESTACION_BOREAL_RELEASE_REPOSITORY = $env:RELEASE_REPOSITORY
+          $keyPath = Join-Path $env:RUNNER_TEMP 'boreal-profile-signing-key.pem'
+          try {
+            [System.IO.File]::WriteAllText($keyPath, $env:ESTACION_BOREAL_PROFILE_SIGNING_KEY, [System.Text.Encoding]::ASCII)
+            $env:ESTACION_BOREAL_PROFILE_PRIVATE_KEY = $keyPath
+            $root = 'work/profile-input/extracted'
+            $manifest = Get-Content "$root/manifest.json" -Raw | ConvertFrom-Json
+            $pack = Join-Path $root $manifest.installPack.filename
+            if ($env:PROFILE_EVENT_ID -eq 'estacion-boreal') {
+              $env:ESTACION_BOREAL_PROFILE_CHANNEL_URL = $channel
+            } else {
+              $env:BOREAL_CONSTRUCTOR_PROFILE_CHANNEL_URL = $channel
+            }
+            node tools/sign-boreal-profile-manifest.cjs "$root/manifest.json" "$root/stable.json"
+            gh release upload $env:RELEASE_TAG $pack "$root/stable.json"
+            "SIGNED_MANIFEST_PATH=$root/stable.json" | Out-File $env:GITHUB_ENV -Encoding utf8 -Append
+          } finally {
+            Remove-Item -LiteralPath $keyPath -Force -ErrorAction SilentlyContinue
+            Remove-Item Env:\ESTACION_BOREAL_PROFILE_PRIVATE_KEY -ErrorAction SilentlyContinue
+            Remove-Item Env:\ESTACION_BOREAL_PROFILE_SIGNING_KEY -ErrorAction SilentlyContinue
+          }
+      - name: Prepare Pages artifact
+        shell: pwsh
+        run: |
+          $destination = "site/channels/$env:PROFILE_EVENT_ID"
+          New-Item -ItemType Directory -Force -Path $destination | Out-Null
+          Copy-Item $env:SIGNED_MANIFEST_PATH "$destination/stable.json" -Force
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy signed profile catalog
+        uses: actions/deploy-pages@v4
+        id: deployment
+        environment:
+          name: github-pages
+          url: ${{ steps.deployment.outputs.page_url }}

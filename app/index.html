@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="theme-color" content="#0b0a12">
+  <title>GDC7 Launcher</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="renderer.js" defer></script>
+</head>
+<body>
+  <div class="app-frame">
+    <div class="windowbar" aria-label="Barra de ventana">
+      <div class="window-brand">
+        <img src="assets/brand-mark.svg" alt="" width="22" height="22">
+        <span id="window-title">GDC7 Launcher</span>
+        <span class="window-version" id="window-version"></span>
+      </div>
+      <div class="window-controls">
+        <button type="button" class="window-control" data-window="minimize" aria-label="Minimizar ventana">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h12"/></svg>
+        </button>
+        <button type="button" class="window-control" data-window="maximize" aria-label="Maximizar o restaurar ventana">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="5" width="10" height="10"/></svg>
+        </button>
+        <button type="button" class="window-control close" data-window="close" aria-label="Cerrar launcher">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m6 6 8 8M14 6l-8 8"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <header class="app-header">
+      <a class="brand-lockup" href="#" data-page-link="home" aria-label="GDC7 Launcher, inicio">
+        <img src="assets/brand-mark.svg" alt="" width="38" height="38">
+        <span>GDC7 <strong>LAUNCHER</strong></span>
+      </a>
+      <nav class="primary-nav" aria-label="Navegación principal">
+        <button type="button" data-page="home" aria-current="page">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3.5 10 8.5-7 8.5 7v10.5H14v-7h-4v7H3.5z"/></svg>
+          <span>Inicio</span>
+        </button>
+        <button type="button" data-page="events" aria-current="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M7.5 3v4M16.5 3v4M3.5 9.5h17M7.5 13h3M13.5 13h3M7.5 17h3"/></svg>
+          <span>Eventos</span>
+        </button>
+        <button type="button" data-page="wardrobe" aria-current="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 4 4 2 4-2 4 3 2 4-3 1.5V21H5v-8.5L2 11l2-4zM8 4c0 2 1.5 3 4 3s4-1 4-3M9 13v4M15 13v4"/></svg>
+          <span>Vestidor</span>
+        </button>
+        <button type="button" data-page="settings" aria-current="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"/><path d="m19.4 13.5 1.1 1.9-2 3.5-2.2-.1a8 8 0 0 1-1.5.9l-.9 2h-4l-.9-2a8 8 0 0 1-1.5-.9l-2.2.1-2-3.5 1.1-1.9a7 7 0 0 1 0-1.8l-1.1-1.9 2-3.5 2.2.1a8 8 0 0 1 1.5-.9l.9-2h4l.9 2a8 8 0 0 1 1.5.9l2.2-.1 2 3.5-1.1 1.9a7 7 0 0 1 0 1.8Z"/></svg>
+          <span>Ajustes</span>
+        </button>
+      </nav>
+      <div class="header-actions">
+        <button type="button" class="offline-button" id="offline-open" aria-haspopup="dialog" aria-controls="offline-dialog">
+          <span class="offline-indicator" aria-hidden="true"></span>
+          <span>Off-line</span>
+          <span class="offline-name-label" id="offline-name-label" hidden></span>
+        </button>
+        <button type="button" class="account-chip" data-page-link="wardrobe">
+          <span class="account-indicator" aria-hidden="true"></span>
+          <span id="header-account-label">Cuenta desconectada</span>
+          <span class="account-monogram" id="header-account-mark" aria-hidden="true">G</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="page home-page" data-view="home" aria-labelledby="home-title">
+        <div class="hero">
+          <div class="hero-copy">
+            <h1 id="home-title" tabindex="-1">Guerra de Clanes 7</h1>
+            <div class="status-line">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span id="hero-status">Cargando perfil del evento</span>
+            </div>
+            <p class="hero-description" id="hero-description">Perfil cliente de GDC7, aislado de cada evento.</p>
+            <div class="event-specs" id="hero-specs" aria-label="Requisitos del evento"></div>
+            <div class="hero-actions">
+              <button type="button" class="button button-primary play-button" id="play-button" disabled aria-describedby="play-reason">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7z"/></svg>
+                <span>Jugar</span>
+              </button>
+              <button type="button" class="button button-secondary" id="news-button">Novedades</button>
+            </div>
+            <p class="action-reason" id="play-reason" role="status">Esperando un manifiesto de instalación verificado.</p>
+          </div>
+          <div class="hero-art" aria-label="Ilustración conceptual de GDC7">
+            <img src="assets/gdc7-hero.png" alt="" class="orbit-scene" id="hero-art-image">
+            <div class="art-caption">
+              <span class="caption-mark" aria-hidden="true"></span>
+              <span id="art-event-label">ATLAS · GDC7</span>
+            </div>
+            <div class="install-readout">
+              <span class="readout-label">PERFIL CLIENTE</span>
+              <strong id="install-readout-title">Perfil GDC7 listo para instalar</strong>
+              <span id="install-readout-note">Minecraft 26.1.2 · NeoForge 26.1.2.95 · Java 25</span>
+            </div>
+          </div>
+        </div>
+        <div class="home-bottom">
+          <div class="event-strip">
+            <div class="strip-heading">
+              <h2>Elegí un evento</h2>
+              <button type="button" class="text-button" data-page-link="events">Ver todos</button>
+            </div>
+            <div class="event-tiles" id="home-event-tiles"></div>
+          </div>
+          <aside class="news-note" aria-labelledby="news-heading">
+            <span class="news-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M5 4.5h14v15H5zM8 8h8M8 12h5M8 16h7"/></svg>
+            </span>
+            <div>
+              <h2 id="news-heading">Actualización GDC7</h2>
+              <p id="news-copy">Comprobando el canal del perfil.</p>
+              <button type="button" class="text-button" id="news-details">Ver cambios</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page inner-page" data-view="events" hidden aria-labelledby="events-title">
+        <div class="page-heading">
+          <div>
+            <h1 id="events-title" tabindex="-1">Eventos</h1>
+            <p>Cada evento conserva su propia instancia y sus propios requisitos.</p>
+          </div>
+          <span class="heading-side-note">PERFILES LOCALES</span>
+        </div>
+        <div class="event-layout">
+          <div class="event-list" id="event-list" role="list" aria-label="Eventos disponibles"></div>
+          <section class="event-detail" id="event-detail" aria-live="polite"></section>
+        </div>
+      </section>
+
+      <section class="page inner-page" data-view="wardrobe" hidden aria-labelledby="wardrobe-title">
+        <div class="page-heading">
+          <div>
+            <h1 id="wardrobe-title" tabindex="-1">Vestidor</h1>
+            <p>Para jugar, iniciá sesión en Prism con una cuenta Microsoft que tenga Minecraft Java.</p>
+          </div>
+          <span class="heading-side-note" id="wardrobe-account-state">SIN SESIÓN</span>
+        </div>
+        <div class="wardrobe-layout">
+          <section class="identity-panel">
+            <div class="identity-art" aria-hidden="true">
+              <img src="assets/brand-mark.svg" alt="" width="72" height="72">
+              <span class="identity-orbit"></span>
+            </div>
+            <div class="identity-copy">
+              <h2 id="identity-name">Perfil sin conectar</h2>
+              <p id="identity-description">Conectá una cuenta oficial para consultar el perfil de Minecraft.</p>
+              <dl class="identity-facts">
+                <div><dt>Perfil</dt><dd id="identity-profile">No disponible</dd></div>
+                <div><dt>Sesión protegida</dt><dd id="identity-storage">Comprobando almacenamiento</dd></div>
+                <div><dt>Skin</dt><dd id="identity-skin">Vista previa no disponible</dd></div>
+              </dl>
+            </div>
+          </section>
+          <section class="account-setup">
+            <h2>Vincular perfil oficial al launcher (opcional)</h2>
+            <p>Este vínculo muestra y verifica tu perfil en el launcher. La cuenta que usa Jugar se administra en Prism; iniciá sesión allí con la misma cuenta Microsoft Premium.</p>
+            <form id="auth-config-form" class="auth-config-form">
+              <label for="auth-client-id">Client ID público de la aplicación</label>
+              <input id="auth-client-id" name="clientId" type="text" inputmode="text" autocomplete="off" spellcheck="false" maxlength="36" placeholder="00000000-0000-0000-0000-000000000000">
+              <p class="helper">Es un identificador público, no una contraseña. Esta app aún no tiene uno configurado.</p>
+              <label class="check-row">
+                <input id="auth-access-confirmed" type="checkbox">
+                <span>Confirmo que la aplicación tiene acceso habilitado a los servicios de Minecraft.</span>
+              </label>
+              <button type="submit" class="button button-secondary" id="save-auth-config">Guardar configuración</button>
+            </form>
+            <div class="device-access" id="device-access" hidden>
+              <span class="readout-label">CÓDIGO DE ACCESO DE MICROSOFT</span>
+              <strong id="device-code"></strong>
+              <p id="device-link"></p>
+              <button type="button" class="text-button" id="account-open-browser">Abrir Microsoft</button>
+            </div>
+            <div class="account-actions">
+              <button type="button" class="button button-primary" id="account-login" disabled>Vincular perfil Microsoft</button>
+              <button type="button" class="button button-secondary" id="account-refresh" hidden>Renovar sesión</button>
+              <button type="button" class="text-button danger-link" id="account-cancel" hidden>Cancelar acceso</button>
+              <button type="button" class="text-button danger-link" id="account-logout" hidden>Cerrar sesión</button>
+            </div>
+            <p class="account-status" id="account-status" role="status" aria-live="polite"></p>
+          </section>
+        </div>
+        <section class="provider-panel">
+          <div>
+            <h2>Cuenta Premium para jugar</h2>
+            <p>Iniciá sesión en Prism con tu cuenta Microsoft con licencia de Minecraft Java. No se admite iniciar el juego escribiendo solo un nombre.</p>
+          </div>
+          <button type="button" class="button button-primary" id="prism-open">Iniciar sesión Premium</button>
+          <p class="provider-state" id="prism-state" role="status" aria-live="polite">Prism permanece cerrado.</p>
+        </section>
+      </section>
+
+      <section class="page inner-page settings-page" data-view="settings" hidden aria-labelledby="settings-title">
+        <div class="page-heading">
+          <div>
+            <h1 id="settings-title" tabindex="-1">Ajustes</h1>
+            <p>Preferencias y carpetas guardadas en este equipo.</p>
+          </div>
+          <span class="heading-side-note" id="launcher-version"></span>
+        </div>
+        <div class="settings-layout">
+          <section class="settings-group">
+            <h2>Carpetas de instancia</h2>
+            <p class="section-intro">Cada ruta pertenece a un único evento. Las carpetas no se copian entre perfiles.</p>
+            <div id="instance-settings" class="instance-settings"></div>
+          </section>
+          <aside class="settings-aside">
+            <section class="preference-panel">
+              <h2>Interfaz</h2>
+              <label class="switch-row">
+                <span><strong>Reducir movimiento</strong><small>Desactiva el movimiento ambiental del arte.</small></span>
+                <input type="checkbox" role="switch" id="reduced-motion">
+              </label>
+            </section>
+            <section class="preference-panel update-panel">
+              <h2>Launcher</h2>
+              <p><strong id="settings-version"></strong></p>
+              <p id="launcher-update-status" class="update-status" role="status" aria-live="polite">Preparando el canal del launcher…</p>
+              <p id="launcher-update-notes" class="helper"></p>
+            </section>
+            <section class="preference-panel update-panel">
+              <h2 id="profile-update-heading">Perfil GDC7</h2>
+              <p><strong id="profile-update-version">Versión del perfil pendiente</strong></p>
+              <p id="profile-update-status" class="update-status" role="status" aria-live="polite">Preparando el canal del perfil…</p>
+              <ul id="profile-update-changes" class="update-changes"></ul>
+              <p id="profile-update-notes" class="helper"></p>
+              <button type="button" class="text-button" id="check-updates">Comprobar actualizaciones</button>
+            </section>
+            <section class="preference-panel">
+              <h2>Diagnóstico local</h2>
+              <p>Resume versiones y disponibilidad sin incluir credenciales, nombres de cuenta ni rutas personales.</p>
+              <div class="diagnostic-actions">
+                <button type="button" class="text-button" id="refresh-state">Actualizar estado local</button>
+                <button type="button" class="text-button" id="copy-diagnostics">Copiar diagnóstico</button>
+              </div>
+              <p class="diagnostic-status" id="diagnostic-status" role="status" aria-live="polite">No se copió ningún dato.</p>
+            </section>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <span><span class="footer-pip" aria-hidden="true"></span><span id="footer-status">Perfiles locales</span></span>
+      <span id="footer-version"></span>
+      <span class="footer-product">GDC7 · EVENTOS INDEPENDIENTES</span>
+    </footer>
+  </div>
+  <div class="offline-backdrop" id="offline-dialog" role="dialog" aria-modal="true" aria-labelledby="offline-title" hidden>
+    <section class="offline-panel">
+      <button type="button" class="offline-close" id="offline-close" aria-label="Cerrar">×</button>
+      <span class="offline-kicker">MODO LOCAL</span>
+      <h2 id="offline-title">Tu nombre local</h2>
+      <p>Guardalo y después elegí el perfil que querés iniciar.</p>
+      <form id="offline-form">
+        <label for="offline-nickname">Nombre de jugador</label>
+        <input id="offline-nickname" name="nickname" type="text" minlength="3" maxlength="16" pattern="[A-Za-z0-9_]{3,16}" autocomplete="nickname" placeholder="Tu nombre" required>
+        <button class="button button-primary offline-submit" id="offline-submit" type="submit">Guardar nombre</button>
+        <button class="text-button offline-clear" id="offline-clear" type="button" hidden>Usar cuenta Premium</button>
+      </form>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</body>
+</html>

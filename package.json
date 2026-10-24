@@ -1,0 +1,30 @@
+{
+  "name": "gdc7-event-launcher",
+  "productName": "GDC7 Launcher",
+  "version": "0.1.4",
+  "description": "Launcher local para eventos independientes de Minecraft",
+  "private": true,
+  "type": "commonjs",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "node scripts/start.cjs",
+    "test": "node --test tests/*.test.cjs",
+    "build:pack": "node scripts/build-gdc7-mrpack.cjs",
+    "verify:mod-sources": "node scripts/verify-gdc7-mod-sources.cjs",
+    "prepackage:portable": "npm run build:pack",
+    "package:portable": "node scripts/package-portable.cjs",
+    "package:installer": "node scripts/package-installer.cjs",
+    "verify:installer": "node scripts/verify-local-installer.cjs",
+    "verify:boreal-release-input": "node scripts/verify-boreal-profile-release.cjs",
+    "prepare:profile-release": "node scripts/prepare-gdc7-profile-release.cjs"
+  },
+  "devDependencies": {
+    "electron": "44.5.1",
+    "electron-builder": "26.17.0"
+  },
+  "dependencies": {
+    "electron-updater": "6.8.10",
+    "yaml": "2.9.1",
+    "yauzl": "3.4.0"
+  }
+}

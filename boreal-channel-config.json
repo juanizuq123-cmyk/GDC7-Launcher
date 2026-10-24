@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "releaseRepository": "juanizuq123-cmyk/Estacion-Boreal-Updates",
+  "channelUrl": "https://juanizuq123-cmyk.github.io/Estacion-Boreal-Updates/channels/estacion-boreal/stable.json",
+  "constructorChannelUrl": "https://juanizuq123-cmyk.github.io/Estacion-Boreal-Updates/channels/boreal-constructor/stable.json"
+}

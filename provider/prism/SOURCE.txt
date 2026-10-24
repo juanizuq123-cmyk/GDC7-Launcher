@@ -1,0 +1,27 @@
+PRISM LAUNCHER 11.1.1 — DISTRIBUCION OFICIAL SIN MODIFICAR
+
+ZIP binario incluido:
+https://github.com/PrismLauncher/PrismLauncher/releases/download/11.1.1/PrismLauncher-Windows-MinGW-w64-Portable-11.1.1.zip
+43687692 bytes
+SHA256 05841d0b3bfc0a8212658457cc6035e1c29cd7ffae919464e874e384cbe8d062
+La huella coincide con el digest de ese asset en la API oficial de GitHub.
+
+Fuente del tag exacto, incluido como PrismLauncher-11.1.1-source.tar.gz:
+https://github.com/PrismLauncher/PrismLauncher/archive/refs/tags/11.1.1.tar.gz
+Repositorio/tag: https://github.com/PrismLauncher/PrismLauncher/tree/11.1.1
+Instrucciones de compilacion:
+https://prismlauncher.org/wiki/development/build-instructions/
+El archivo fuente conserva las instrucciones, scripts de construccion,
+.gitmodules y referencias de las dependencias del proyecto. Para reconstruir
+con git, clone el repositorio, checkout 11.1.1 y actualice sus submodulos.
+Qt: https://download.qt.io/archive/qt/ ; MinGW: https://www.mingw-w64.org/
+Licencias/avisos: LICENSE-Prism.txt y COPYING-Prism.md.
+
+GDC7 Launcher utiliza --dir y --show-window únicamente para abrir el gestor
+de cuentas oficial. No recompila ni altera ese ejecutable, no inspecciona sus
+archivos de sesión y nunca le pide iniciar una instancia. La configuración de
+Prism queda en una carpeta separada de las carpetas de cada evento.
+
+Archivo fuente: 4041521 bytes
+SHA256 8a953c25afd0a62d2050edac9fe23d93dcaee27c94b4d1dc86740332c64d2497
+Tree oficial del tag: 7d2d3c1ec6fcf8255ebacd02d9f792688575dfb4

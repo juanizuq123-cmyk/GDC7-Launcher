@@ -1,0 +1,502 @@
+{
+  "schemaVersion": 1,
+  "eventId": "gdc7",
+  "id": "gdc7-neoforge-client",
+  "version": "0.3.0",
+  "auditedOn": "2026-10-21",
+  "target": {
+    "minecraft": "26.1.2",
+    "loader": "neoforge",
+    "loaderVersion": "26.1.2.95",
+    "javaMajor": 25,
+    "installSide": "client"
+  },
+  "targetSources": {
+    "repository": "C:/GDC7/mod",
+    "minecraftAndNeoForge": "mod/build.gradle",
+    "javaMajor": "mod/build.gradle java.toolchain.languageVersion; target versions are also documented in mod/build/resources/main/META-INF/neoforge.mods.toml"
+  },
+  "verification": {
+    "officialModrinthVersionRecords": true,
+    "exactMinecraftAndLoaderNoBuildQueries": true,
+    "downloadedFilesAndPublishedHashes": true,
+    "jarNeoForgeMetadataInspected": true,
+    "requiredDependencyClosureChecked": true,
+    "testedInMinecraft": false
+  },
+  "mods": [
+    {
+      "modId": "xaeroworldmap",
+      "name": "Xaero's World Map",
+      "projectId": "NcUtCpym",
+      "projectSlug": "xaeros-world-map",
+      "projectUrl": "https://modrinth.com/mod/xaeros-world-map",
+      "versionId": "rLnqjWTq",
+      "versionUrl": "https://modrinth.com/mod/xaeros-world-map/version/rLnqjWTq",
+      "version": "neoforge-26.1.2-1.47.1",
+      "versionType": "release",
+      "gameVersions": ["26.1.2"],
+      "loaders": ["neoforge"],
+      "projectSide": { "client": "required", "server": "optional" },
+      "env": { "client": "required", "server": "optional" },
+      "neoforgeRange": "[26.1.2.22-beta,26.2)",
+      "neoforgeMinimum": "26.1.2.22-beta",
+      "neoforgeMaximumExclusive": "26.2",
+      "dependencies": [
+        { "projectId": "gF3BGWvG", "name": "Xaero's Minimap", "type": "optional", "included": false }
+      ],
+      "file": {
+        "filename": "xaeroworldmap-neoforge-26.1.2-1.47.1.jar",
+        "url": "https://cdn.modrinth.com/data/NcUtCpym/versions/rLnqjWTq/xaeroworldmap-neoforge-26.1.2-1.47.1.jar",
+        "size": 1448287,
+        "hashes": {
+          "sha1": "b8c9df6b5a45d4a2feabdbc30b1d453a960d363a",
+          "sha512": "e7e9d9e80f4e3cfed5ab10696f79f89690e84a63443085fde9a2cd8dcd255e7ece1abfbdbd5bf34a95c0b54bc1cc44b8d42d1a74249ef8adeb2407ad34c5c4f1"
+        }
+      }
+    },
+    {
+      "modId": "trashslot",
+      "name": "TrashSlot",
+      "projectId": "vRYk0bv7",
+      "projectSlug": "trashslot",
+      "projectUrl": "https://modrinth.com/mod/trashslot",
+      "versionId": "lZYf8oM4",
+      "versionUrl": "https://modrinth.com/mod/trashslot/version/lZYf8oM4",
+      "version": "26.1.2.4+neoforge-26.1.2",
+      "versionType": "release",
+      "gameVersions": ["26.1.2"],
+      "loaders": ["neoforge"],
+      "projectSide": { "client": "required", "server": "required" },
+      "env": { "client": "required", "server": "required" },
+      "neoforgeRange": "[26.1.1.15-beta,)",
+      "neoforgeMinimum": "26.1.1.15-beta",
+      "neoforgeMaximumExclusive": null,
+      "dependencies": [
+        { "projectId": "MBAkmtvl", "name": "Balm", "type": "required", "included": true, "versionId": "FgDdQRa6" }
+      ],
+      "file": {
+        "filename": "trashslot-neoforge-26.1.2-26.1.2.4.jar",
+        "url": "https://cdn.modrinth.com/data/vRYk0bv7/versions/lZYf8oM4/trashslot-neoforge-26.1.2-26.1.2.4.jar",
+        "size": 147183,
+        "hashes": {
+          "sha1": "9389fd4bd776ddbcf1cfeffd000a7eb4eba963be",
+          "sha512": "6e107a898a440a1f329badc8174ae611f056310bfc1f478f2b384a774fff107d707e67fb63dd38ec9aa4bae8038ba45502590ba4302898c6e1b307db94ce20b7"
+        }
+      }
+    },
+    {
+      "modId": "balm",
+      "name": "Balm",
+      "projectId": "MBAkmtvl",
+      "projectSlug": "balm",
+      "projectUrl": "https://modrinth.com/mod/balm",
+      "versionId": "FgDdQRa6",
+      "versionUrl": "https://modrinth.com/mod/balm/version/FgDdQRa6",
+      "version": "26.1.2.15+neoforge-26.1.2",
+      "versionType": "release",
+      "gameVersions": ["26.1.2"],
+      "loaders": ["neoforge"],
+      "projectSide": { "client": "optional", "server": "optional" },
+      "env": { "client": "required", "server": "required" },
+      "neoforgeRange": "[26.1.2.93,)",
+      "neoforgeMinimum": "26.1.2.93",
+      "neoforgeMaximumExclusive": null,
+      "dependencies": [],
+      "includedFor": ["TrashSlot client and server dependency"],
+      "file": {
+        "filename": "balm-neoforge-26.1.2-26.1.2.15.jar",
+        "url": "https://cdn.modrinth.com/data/MBAkmtvl/versions/FgDdQRa6/balm-neoforge-26.1.2-26.1.2.15.jar",
+        "size": 1072715,
+        "hashes": {
+          "sha1": "89ee668e589bc166367750ec45b04ee7a08c2ca4",
+          "sha512": "91003407ad9b09e31ad46867b11d8bb5f3c1cf6d005b0109ef417fab45e8f6a2a2d1414dacf3b3098fb7882a773a1160cecc68fa943cb5cd0312852554d72e7a"
+        }
+      }
+    },
+    {
+      "modId": "sodium",
+      "name": "Sodium",
+      "projectId": "AANobbMI",
+      "projectSlug": "sodium",
+      "projectUrl": "https://modrinth.com/mod/sodium",
+      "versionId": "zg4YQ9EL",
+      "versionUrl": "https://modrinth.com/mod/sodium/version/zg4YQ9EL",
+      "version": "mc26.1.2-0.9.2-neoforge",
+      "versionType": "release",
+      "gameVersions": ["26.1.2"],
+      "loaders": ["neoforge"],
+      "projectSide": { "client": "required", "server": "unsupported" },
+      "env": { "client": "required", "server": "unsupported" },
+      "neoforgeRange": "[26.1.2.10-beta,)",
+      "neoforgeMinimum": "26.1.2.10-beta",
+      "neoforgeMaximumExclusive": null,
+      "dependencies": [],
+      "file": {
+        "filename": "sodium-neoforge-0.9.2+mc26.1.2.jar",
+        "url": "https://cdn.modrinth.com/data/AANobbMI/versions/zg4YQ9EL/sodium-neoforge-0.9.2%2Bmc26.1.2.jar",
+        "size": 1260562,
+        "hashes": {
+          "sha1": "e03e21bf6553fc517241d59c2c116b8e5cc882f8",
+          "sha512": "899c2d888831c4044877955ab06b5333c6e17bd89b543d4f5bd0e188caca8791727bd18e5e9c5fe52cc14aa6e4173b8ba4905416914126c48d70135318ef1012"
+        }
+      }
+    },
+    {
+      "modId": "immediatelyfast",
+      "name": "ImmediatelyFast",
+      "projectId": "5ZwdcRci",
+      "projectSlug": "immediatelyfast",
+      "projectUrl": "https://modrinth.com/mod/immediatelyfast",
+      "versionId": "adbrNJLm",
+      "versionUrl": "https://modrinth.com/mod/immediatelyfast/version/adbrNJLm",
+      "version": "1.15.3+26.1-neoforge",
+      "versionType": "release",
+      "gameVersions": ["26.1", "26.1.1", "26.1.2"],
+      "loaders": ["neoforge"],
+      "projectSide": { "client": "required", "server": "unsupported" },
+      "env": { "client": "required", "server": "unsupported" },
+      "neoforgeRange": "[26.1.0.0,26.2.0.0)",
+      "neoforgeMinimum": "26.1.0.0",
+      "neoforgeMaximumExclusive": "26.2.0.0",
+      "dependencies": [],
+      "file": {
+        "filename": "ImmediatelyFast-NeoForge-1.15.3+26.1.jar",
+        "url": "https://cdn.modrinth.com/data/5ZwdcRci/versions/adbrNJLm/ImmediatelyFast-NeoForge-1.15.3%2B26.1.jar",
+        "size": 312276,
+        "hashes": {
+          "sha1": "bb10bdde4199da3cb7a2a64f9e3274a46218c9f1",
+          "sha512": "da8f54b463ef62e6b2181064d734c534ec44b2703496e531842b12af4defe9abc42f4589e0ec2ffc6aa08e794158d1d875f0a8e2f8b01f000c47850d101ad9b6"
+        }
+      }
+    },
+    {
+      "modId": "modernfix",
+      "name": "ModernFix",
+      "projectId": "nmDcB62a",
+      "projectSlug": "modernfix",
+      "projectUrl": "https://modrinth.com/mod/modernfix",
+      "versionId": "mKbwUMKg",
+      "versionUrl": "https://modrinth.com/mod/modernfix/version/mKbwUMKg",
+      "version": "5.27.24+mc26.1.2",
+      "versionType": "release",
+      "gameVersions": ["26.1.2"],
+      "loaders": ["neoforge"],
+      "projectSide": { "client": "optional", "server": "optional" },
+      "env": { "client": "required", "server": "optional" },
+      "neoforgeRange": "[26.0,)",
+      "neoforgeMinimum": "26.0",
+      "neoforgeMaximumExclusive": null,
+      "dependencies": [
+        { "projectId": "2u6LRnMa", "name": "Just Enough Items (JEI)", "type": "optional", "included": false, "reason": "JEI está excluido por pedido explícito." }
+      ],
+      "file": {
+        "filename": "modernfix-neoforge-5.27.24+mc26.1.2.jar",
+        "url": "https://cdn.modrinth.com/data/nmDcB62a/versions/mKbwUMKg/modernfix-neoforge-5.27.24%2Bmc26.1.2.jar",
+        "size": 511945,
+        "hashes": {
+          "sha1": "693d8b42a2dc717e7cfc26a8afa50db928cfe36a",
+          "sha512": "a5c4c96247bfcfd9e3fe83d5076782c8f11e36657f66589e434d2ca29aba91e7d9416259305dd561cfd27d8b8511413ee6a2a0e8b4499eb34d85096fb0c843b2"
+        }
+      }
+    },
+    {
+      "modId": "easybuilding",
+      "name": "Easy Building",
+      "projectId": "t3wlJuW5",
+      "projectSlug": "easy-building",
+      "projectUrl": "https://modrinth.com/mod/easy-building",
+      "versionId": "UPaEu1Cw",
+      "versionUrl": "https://modrinth.com/mod/easy-building/version/UPaEu1Cw",
+      "version": "1.1.0",
+      "versionType": "release",
+      "gameVersions": ["26.1.2"],
+      "loaders": ["neoforge"],
+      "projectSide": { "client": "required", "server": "unsupported" },
+      "env": { "client": "required", "server": "unsupported" },
+      "neoforgeRange": "[26.1.2.76,)",
+      "neoforgeMinimum": "26.1.2.76",
+      "neoforgeMaximumExclusive": null,
+      "dependencies": [],
+      "usageNote": "La página del autor advierte que el servidor multijugador puede prohibir la colocación rápida.",
+      "file": {
+        "filename": "easybuilding-neoforge-26.1.2-v1.1.jar",
+        "url": "https://cdn.modrinth.com/data/t3wlJuW5/versions/UPaEu1Cw/easybuilding-neoforge-26.1.2-v1.1.jar",
+        "size": 20311,
+        "hashes": {
+          "sha1": "37b7908a9a85576259baa858564b3fc5e59ae8e8",
+          "sha512": "3847f32a30d2bcd7ad428c979e46bdd16e810cdd5796b5b77a3e0b0de4a9ce690aa522971a8a43c8ce0d15e2936cd2b5570c928567149e5bcfce72a5fff444bf"
+        }
+      }
+    },
+    {
+      "modId": "constructionstick",
+      "name": "Construction Sticks",
+      "projectId": "ooyjDLZt",
+      "projectSlug": "construction-sticks",
+      "projectUrl": "https://modrinth.com/mod/construction-sticks",
+      "versionId": "IHKUzTQn",
+      "versionUrl": "https://modrinth.com/mod/construction-sticks/version/IHKUzTQn",
+      "version": "3.2.1",
+      "versionType": "beta",
+      "gameVersions": ["26.1.2"],
+      "loaders": ["neoforge"],
+      "projectSide": { "client": "required", "server": "required" },
+      "env": { "client": "required", "server": "required" },
+      "neoforgeRange": "[26.1.2.21-beta,)",
+      "neoforgeMinimum": "26.1.2.21-beta",
+      "neoforgeMaximumExclusive": null,
+      "dependencies": [
+        { "projectId": "u6dRKJwZ", "name": "Just Enough Items (JEI)", "type": "optional", "included": false, "reason": "JEI está excluido por pedido explícito." }
+      ],
+      "file": {
+        "filename": "ConstructionSticks-26.1.2-3.2.1.jar",
+        "url": "https://cdn.modrinth.com/data/ooyjDLZt/versions/IHKUzTQn/ConstructionSticks-26.1.2-3.2.1.jar",
+        "size": 270185,
+        "hashes": {
+          "sha1": "3ec4e54f78d434ea2b79b8c5e62f110bfe3e8f5c",
+          "sha512": "716fe2288b8c13267e945db0afebefb33997070531ad5aac574f28d22c8e6a7374ef22b520017a61aff68807eced6d0dfc8b10fdcfe52b97399a519c796aab47"
+        }
+      }
+    }
+  ],
+  "exactBuildChecks": [
+    { "name": "Chipped", "projectId": "BAscRYKm", "projectUrl": "https://modrinth.com/mod/chipped", "expectedVersionCount": 0, "projectSide": { "client": "required", "server": "required" } },
+    { "name": "Immersive Hotbar", "projectId": "hsPB5xMD", "projectUrl": "https://modrinth.com/mod/immersive-hotbar", "expectedVersionCount": 0, "projectSide": { "client": "required", "server": "unsupported" } },
+    { "name": "Immersive Damage Indicators", "projectId": "tTKSJOdG", "projectUrl": "https://modrinth.com/mod/immersive-damage-indicators", "expectedVersionCount": 0, "projectSide": { "client": "required", "server": "unsupported" } },
+    { "name": "Embeddium", "projectId": "sk9rgfiA", "projectUrl": "https://modrinth.com/mod/embeddium", "expectedVersionCount": 0, "projectSide": { "client": "required", "server": "unsupported" } },
+    { "name": "Axiom", "projectId": "N6n5dqoA", "projectUrl": "https://modrinth.com/mod/axiom", "expectedVersionCount": 0, "projectSide": { "client": "optional", "server": "optional" } },
+    { "name": "Litematica", "projectId": "bEpr0Arc", "projectUrl": "https://modrinth.com/mod/litematica", "expectedVersionCount": 0, "projectSide": { "client": "required", "server": "unsupported" } },
+    { "name": "MaLiLib", "projectId": "GcWjdA9I", "projectUrl": "https://modrinth.com/mod/malilib", "expectedVersionCount": 0, "projectSide": { "client": "required", "server": "unsupported" } },
+    { "name": "Litematica RawMaterials", "projectId": "OWsxlyPe", "projectUrl": "https://modrinth.com/mod/litematica-rawmaterials", "expectedVersionCount": 0, "projectSide": { "client": "required", "server": "unsupported" } }
+  ],
+  "excludedMods": [
+    {
+      "name": "Chipped",
+      "projectId": "BAscRYKm",
+      "projectUrl": "https://modrinth.com/mod/chipped",
+      "checked": { "minecraft": "26.1.2", "loader": "neoforge" },
+      "reason": "No hay versión publicada que declare a la vez Minecraft 26.1.2 y NeoForge.",
+      "possibleAlternative": {
+        "name": "Beyond & More",
+        "projectId": "bK2sBOOL",
+        "projectUrl": "https://modrinth.com/mod/beyond-and-more",
+        "version": "4.1.0",
+        "versionId": "qrqcvWwf",
+        "versionUrl": "https://modrinth.com/mod/beyond-and-more/version/qrqcvWwf",
+        "versionType": "release",
+        "gameVersions": ["26.1.2"],
+        "loaders": ["neoforge"],
+        "projectSide": { "client": "required", "server": "required" },
+        "compatibility": { "minecraft": "26.1.2", "loader": "neoforge" },
+        "side": { "client": "required", "server": "required" },
+        "file": {
+          "filename": "Beyond-and-More-4.1.0-mc26.1.2-NeoForge.jar",
+          "url": "https://cdn.modrinth.com/data/bK2sBOOL/versions/qrqcvWwf/Beyond-and-More-4.1.0-mc26.1.2-NeoForge.jar",
+          "size": 72751329,
+          "hashes": {
+            "sha1": "2444fc0001dd2074583cf03657917014b26d9430",
+            "sha512": "482a7b147a5d787dbda57f11204cd7b6d03a6f98c09f32b11b833036eff4cd5d6f0eb72944dbcd724574d67339c2aa4d45511a36d51900b89e9a002b5d07af91"
+          }
+        },
+        "installed": false,
+        "reason": "Alternativa de variantes de bloques; requiere instalación equivalente en servidor y no es Chipped. No se sustituyó automáticamente."
+      }
+    },
+    {
+      "name": "Immersive Hotbar",
+      "projectId": "hsPB5xMD",
+      "projectUrl": "https://modrinth.com/mod/immersive-hotbar",
+      "checked": { "minecraft": "26.1.2", "loader": "neoforge" },
+      "reason": "La consulta exacta de versiones de Modrinth no devuelve build NeoForge para Minecraft 26.1.2. No se incluyó la build Fabric 26.1.1-26.1 ni una build de otra versión. No se verificó una alternativa equivalente para este objetivo."
+    },
+    {
+      "name": "Pick Up Notifier",
+      "projectId": "ZX66K16c",
+      "projectUrl": "https://modrinth.com/mod/pick-up-notifier",
+      "checkedVersion": {
+        "version": "26.1.1",
+        "versionId": "OT6grywj",
+        "versionUrl": "https://modrinth.com/mod/pick-up-notifier/version/OT6grywj",
+        "versionType": "release",
+        "compatibility": { "minecraft": "26.1.2", "loader": "neoforge" },
+        "gameVersions": ["26.1", "26.1.1", "26.1.2"],
+        "loaders": ["neoforge"],
+        "file": {
+          "filename": "PickUpNotifier-v26.1.1-mc26.1.x-NeoForge.jar",
+          "url": "https://cdn.modrinth.com/data/ZX66K16c/versions/OT6grywj/PickUpNotifier-v26.1.1-mc26.1.x-NeoForge.jar",
+          "size": 76869,
+          "hashes": {
+            "sha1": "ccfc30fb125afd10cb3d30815010d560c179c94b",
+            "sha512": "a4ca84bd2942876d5438d0827c7c9bcedb26d7ce67475365bedb9bc77dba1f9445e8f25d0f7157fce7a3c14efb28a2ad9a66a10c4c73d3cf092cc9d12941247a"
+          }
+        }
+      },
+      "requiredDependency": {
+        "name": "Puzzles Lib",
+        "projectId": "QAGBst4M",
+        "version": "26.1.16",
+        "versionId": "ntQknrEC",
+        "versionUrl": "https://modrinth.com/mod/puzzles-lib/version/ntQknrEC",
+        "versionType": "release",
+        "gameVersions": ["26.1", "26.1.1", "26.1.2"],
+        "loaders": ["neoforge"],
+        "file": {
+          "filename": "puzzleslib-v26.1.16-mc26.1.x+neoforge.jar",
+          "url": "https://cdn.modrinth.com/data/QAGBst4M/versions/ntQknrEC/puzzleslib-v26.1.16-mc26.1.x%2Bneoforge.jar",
+          "size": 1077103,
+          "hashes": {
+            "sha1": "45b246435cdba69afa2312c7fa8c757e212685de",
+            "sha512": "73f88f6a25712a6d11b4f45dded52721a755348bf932525b2a7d3ff84adea4659460f21da88894d69df541a87a079c467d46c6920a6b77016c7b4cc6741755fa"
+          }
+        },
+        "neoforgeMinimum": "26.1.2.99",
+        "neoforgeRange": "[26.1.2.99,)"
+      },
+      "reason": "La build de Pick Up Notifier exige Puzzles Lib. El META-INF/neoforge.mods.toml del archivo oficial de Puzzles Lib 26.1.16 requiere NeoForge >=26.1.2.99; el objetivo confirmado es 26.1.2.95, por lo que no se instalaron ninguno de los dos."
+    },
+    {
+      "name": "Immersive Damage Indicators",
+      "projectId": "tTKSJOdG",
+      "projectUrl": "https://modrinth.com/mod/immersive-damage-indicators",
+      "checked": { "minecraft": "26.1.2", "loader": "neoforge" },
+      "possibleAlternative": {
+        "name": "Highly Customizable Damage Numbers",
+        "projectId": "3DnMjWfL",
+        "projectUrl": "https://modrinth.com/mod/hicudan",
+        "version": "v1.1.3+26.1",
+        "versionId": "fk3yUlq0",
+        "versionUrl": "https://modrinth.com/mod/hicudan/version/fk3yUlq0",
+        "versionType": "release",
+        "gameVersions": ["26.1.2"],
+        "loaders": ["neoforge"],
+        "projectSide": { "client": "required", "server": "unsupported" },
+        "env": { "client": "required", "server": "unsupported" },
+        "dependencies": [],
+        "file": {
+          "filename": "highly_customizable_damage_numbers-neoforge-26.1-1.1.3.jar",
+          "url": "https://cdn.modrinth.com/data/3DnMjWfL/versions/fk3yUlq0/highly_customizable_damage_numbers-neoforge-26.1-1.1.3.jar",
+          "size": 135548,
+          "hashes": {
+            "sha1": "3d1435c158443d97ca403ee73fc588d1a03ca4da",
+            "sha512": "d399d7471d036fff9532c6579022e237c259efca66cbee9e78e88d1fb8227b72356d90be416edef734d7be849d705e4df73c551ed2ba3d1e41c5313ec6fdb387"
+          }
+        },
+        "installed": false,
+        "reason": "Alternativa de daño flotante compatible declarada por Modrinth; es un mod distinto y no sustituye Immersive Damage Indicators sin decisión expresa."
+      },
+      "reason": "La consulta exacta no devuelve build NeoForge de Immersive Damage Indicators para 26.1.2. No se reemplazó por Hit It ni por otro indicador."
+    },
+    {
+      "name": "Embeddium",
+      "projectId": "sk9rgfiA",
+      "projectUrl": "https://modrinth.com/mod/embeddium",
+      "checked": { "minecraft": "26.1.2", "loader": "neoforge" },
+      "reason": "No se encontró build NeoForge exacta para 26.1.2. Se eligió Sodium 0.9.2, cuyo archivo oficial sí declara esa combinación."
+    },
+    {
+      "name": "More Culling",
+      "projectId": "51shyZVL",
+      "projectUrl": "https://modrinth.com/mod/moreculling",
+      "checkedVersion": {
+        "version": "1.7.3",
+        "versionId": "3pwnQv9b",
+        "versionUrl": "https://modrinth.com/mod/moreculling/version/3pwnQv9b",
+        "versionType": "release",
+        "gameVersions": ["26.1", "26.1.1", "26.1.2"],
+        "loaders": ["neoforge"],
+        "file": {
+          "filename": "moreculling-neoforge-26.1.2-1.7.3.jar",
+          "url": "https://cdn.modrinth.com/data/51shyZVL/versions/3pwnQv9b/moreculling-neoforge-26.1.2-1.7.3.jar",
+          "size": 352565,
+          "hashes": {
+            "sha1": "feacb8da17bd6c29dfd710c9559386ae16d6551d",
+            "sha512": "a756c7173683564cd4ca9f54721f013581372ba05a1a40ea532f22d2323b226ec44c93db01409e2ff1e4f2d68da8a470bd7fc03db6fdfafdd1efb0118f57a377"
+          }
+        }
+      },
+      "requiredDependency": {
+        "name": "Cloth Config API",
+        "projectId": "9s6osm5g",
+        "versionId": "TimoYzse",
+        "version": "26.1.154+neoforge",
+        "versionType": "release",
+        "gameVersions": ["26.1.2"],
+        "loaders": ["neoforge"],
+        "file": {
+          "filename": "cloth-config-26.1.154.jar",
+          "url": "https://cdn.modrinth.com/data/9s6osm5g/versions/TimoYzse/cloth-config-26.1.154.jar",
+          "size": 1135993,
+          "hashes": {
+            "sha1": "1700599980477b0ea72608bfdadee7bdde8b9b75",
+            "sha512": "b3084e992459c211617bf5247a94b93c06823277932341e7cec98602a6c6e21ca599aae5e552868ae7a60aac6ec33f3a9cee11615667470483948b3e349d3caf"
+          }
+        }
+      },
+      "sodiumRange": "[,0.6.7)",
+      "reason": "Aunque declara juego/loader exactos, su META-INF/neoforge.mods.toml requiere Sodium <0.6.7 y este pack fija Sodium 0.9.2; se excluyó More Culling y su dependencia Cloth Config para evitar un conflicto declarado."
+    },
+    {
+      "name": "Litematica",
+      "projectId": "bEpr0Arc",
+      "projectUrl": "https://modrinth.com/mod/litematica",
+      "checked": { "minecraft": "26.1.2", "loader": "neoforge" },
+      "reason": "No hay build NeoForge con compatibilidad declarada para el objetivo exacto."
+    },
+    {
+      "name": "MaLiLib",
+      "projectId": "GcWjdA9I",
+      "projectUrl": "https://modrinth.com/mod/malilib",
+      "checked": { "minecraft": "26.1.2", "loader": "neoforge" },
+      "reason": "No hay build NeoForge con compatibilidad declarada para el objetivo exacto; no se instaló su archivo Fabric."
+    },
+    {
+      "name": "Litematica RawMaterials",
+      "projectId": "OWsxlyPe",
+      "projectUrl": "https://modrinth.com/mod/litematica-rawmaterials",
+      "checked": { "minecraft": "26.1.2", "loader": "neoforge" },
+      "reason": "No hay build NeoForge con compatibilidad declarada para el objetivo exacto."
+    },
+    {
+      "name": "Axiom",
+      "projectId": "N6n5dqoA",
+      "projectUrl": "https://modrinth.com/mod/axiom",
+      "checked": { "minecraft": "26.1.2", "loader": "neoforge" },
+      "reason": "No hay build NeoForge con compatibilidad declarada para el objetivo exacto."
+    },
+    {
+      "name": "WorldEdit",
+      "projectId": "1u6JkXh5",
+      "projectUrl": "https://modrinth.com/mod/worldedit",
+      "checkedVersion": {
+        "version": "7.4.3",
+        "versionId": "gjsLvJfW",
+        "versionUrl": "https://modrinth.com/plugin/worldedit/version/7.4.3",
+        "versionType": "release",
+        "gameVersions": ["26.1", "26.1.1", "26.1.2"],
+        "loaders": ["fabric", "neoforge"],
+        "supportedEnvironments": ["server-side", "singleplayer"],
+        "compatibility": { "minecraft": "26.1.2", "loader": "neoforge" },
+        "file": {
+          "filename": "worldedit-mod-7.4.3.jar",
+          "url": "https://cdn.modrinth.com/data/1u6JkXh5/versions/gjsLvJfW/worldedit-mod-7.4.3.jar",
+          "size": 5215216,
+          "hashes": {
+            "sha1": "87dc85780868e38885d188a60fc7f9f7d8be5277",
+            "sha512": "de51a1a319e057f1312ec54de2f08df5d0c00a78718080a3284e0c1ffadffb47d5353e0e538d9334b72eb7260df5a6f2c4bf8373eec8d5a4f6cdfaae1ff4524e"
+          }
+        }
+      },
+      "reason": "La página oficial declara los entornos server-side y singleplayer (el servidor integrado), sin compatibilidad de cliente multijugador. Se excluyó del perfil cliente."
+    },
+    {
+      "name": "Just Enough Items (JEI)",
+      "projectId": "u6dRKJwZ",
+      "projectUrl": "https://modrinth.com/mod/jei",
+      "reason": "Excluido expresamente por pedido; no se añadió como dependencia opcional."
+    }
+  ],
+  "nonModServerChanges": false,
+  "gameplayModGdc7Included": false,
+  "serverOnlyModsInstalledOnClient": false
+}

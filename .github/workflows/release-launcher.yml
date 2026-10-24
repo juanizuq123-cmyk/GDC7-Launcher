@@ -1,0 +1,103 @@
+name: Release launcher
+
+on:
+  push:
+    tags: ["launcher-v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Exact version already present in package.json
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: gdc7-pages-stable
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: windows-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GDC7_LAUNCHER_SIGNING_KEY: ${{ secrets.GDC7_LAUNCHER_SIGNING_KEY }}
+      REQUESTED_VERSION: ${{ inputs.version }}
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+    steps:
+      - name: Checkout tagged source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check version and tag
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          if ($env:GITHUB_REF_TYPE -eq 'tag') {
+            $tagVersion = $env:GITHUB_REF_NAME -replace '^launcher-v', ''
+            if ($tagVersion -ne $version) { throw "El tag $env:GITHUB_REF_NAME no coincide con package.json ($version)." }
+          } elseif ($env:REQUESTED_VERSION -ne $version) { throw 'La versión manual debe coincidir con package.json.' }
+          if ([string]::IsNullOrWhiteSpace($env:GDC7_LAUNCHER_SIGNING_KEY)) { throw 'Falta el secreto GDC7_LAUNCHER_SIGNING_KEY.' }
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build NSIS installer
+        run: npm run package:installer
+      - name: Sign and verify launcher channel metadata
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          $folder = "dist/installer-v$version"
+          $exe = Get-ChildItem $folder -Filter '*.exe' | Select-Object -First 1
+          if (-not $exe) { throw 'No se encontró el instalador.' }
+          node scripts/sign-launcher-channel.cjs --metadata "$folder/latest.yml" --installer "$($exe.FullName)" --version $version --output "$folder/latest.json" --private-key-env GDC7_LAUNCHER_SIGNING_KEY
+      - name: Create immutable launcher release
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          $tag = "launcher-v$version"
+          $folder = "dist/installer-v$version"
+          if (gh release view $tag 2>$null) { throw "La release $tag ya existe; las releases publicadas son inmutables." }
+          $assets = Get-ChildItem $folder -File | Where-Object { $_.Extension -in '.exe', '.blockmap' } | ForEach-Object { $_.FullName }
+          if (-not $assets) { throw 'No se encontraron el instalador y el blockmap.' }
+          gh release create $tag @assets --title "GDC7 Launcher $version" --notes "Launcher NSIS por usuario. El canal de actualización se publica en GitHub Pages después de verificar el instalador."
+      - name: Checkout Pages source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: site-repo
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update launcher pointer and Pages files
+        shell: pwsh
+        run: |
+          $version = (Get-Content package.json -Raw | ConvertFrom-Json).version
+          $folder = "dist/installer-v$version"
+          $site = "site-repo/site/updates/launcher/stable"
+          New-Item -ItemType Directory -Force -Path $site | Out-Null
+          Copy-Item "$folder/latest.yml" $site -Force
+          Copy-Item "$folder/latest.json" $site -Force
+          Push-Location site-repo
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add site/updates/launcher/stable/latest.yml site/updates/launcher/stable/latest.json
+          if (-not (git diff --cached --quiet)) { git commit -m "Publish launcher channel $version"; git push origin "HEAD:$env:DEFAULT_BRANCH" }
+          Pop-Location
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site-repo/site
+      - name: Deploy Pages
+        uses: actions/deploy-pages@v4
+        id: deployment
+        environment:
+          name: github-pages
+          url: ${{ steps.deployment.outputs.page_url }}

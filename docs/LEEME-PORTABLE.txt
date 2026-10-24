@@ -1,0 +1,47 @@
+GDC7 Launcher 0.1.1 — Instalador por usuario, Windows x64
+
+INSTALAR
+1. Ejecutá GDC7-Launcher-0.1.1-x64-setup.exe. No requiere permisos de administrador.
+2. Abrí GDC7 Launcher desde el menú Inicio.
+3. En Inicio, pulsá Instalar perfil GDC7 y confirmá la importación en Prism.
+4. Esperá a que Prism instale Minecraft, NeoForge y las dependencias del pack.
+5. En Vestidor, pulsá Iniciar sesión Premium y conectá en Prism la cuenta Microsoft que tenga Minecraft Java.
+6. Volvé al launcher y pulsá Jugar perfil GDC7.
+
+El launcher no ofrece acceso escribiendo únicamente un nombre de usuario. El
+vínculo opcional de perfil en Vestidor no reemplaza el inicio de sesión de Prism.
+
+PERFIL CLIENTE
+- Minecraft 26.1.2 · NeoForge 26.1.2.95 · Java 25.
+- Ocho mods fijados por versión, fuente y SHA-1/SHA-512.
+- Construction Sticks está en versión beta.
+- El perfil no incluye el mod de gameplay GDC7, dirección de servidor ni JEI.
+- TrashSlot, Balm y Construction Sticks también requieren las mismas builds
+  en el servidor antes de usarlos allí. Este portable no modifica servidores.
+- Easy Building es cliente; consultá las reglas del servidor antes de usar la
+  colocación rápida en multijugador.
+- Mods sin build exacta o con dependencia/rango NeoForge incompatible quedan
+  fuera; el detalle está en docs/PACK-DECISION.md y en el manifiesto incluido
+  en la entrega.
+
+ACTUALIZAR EL LAUNCHER
+El portable alpha.3 no tiene autoactualización del programa. Para activar el
+canal automático desde esa versión, ejecutá una vez el instalador NSIS por
+usuario. Usa el mismo identificador de aplicación y conserva las carpetas Prism,
+cuenta y configuración. El portable extraído queda intacto.
+
+Después de esa primera instalación, el launcher consulta su canal estable,
+verifica el manifiesto firmado y el SHA-512 del instalador, y aplica las
+versiones posteriores automáticamente. Las actualizaciones del launcher y del
+perfil GDC7 usan canales independientes. Los feeds quedan activos una vez que
+el repositorio público GDC7-Launcher y su GitHub Pages estén publicados.
+
+Si el canal del perfil está caído, el perfil instalado sigue disponible. Una
+release se descarga y verifica completa antes de aplicar cambios; una
+transacción fallida se revierte desde la copia local. Esta versión admite el
+objetivo Minecraft 26.1.2, NeoForge 26.1.2.95 y Java 25; otro objetivo queda
+pendiente hasta implementar una instancia versionada separada.
+
+Prism usa un directorio propio del launcher y gestiona la cuenta Microsoft.
+El perfil no se conecta a ningún servidor ni crea un mundo automáticamente.
+Para jugar localmente, elegí Un jugador desde el menú de Minecraft.
