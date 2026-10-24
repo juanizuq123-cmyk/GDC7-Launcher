@@ -96,6 +96,16 @@ jobs:
           $destination = "site/channels/$env:PROFILE_EVENT_ID"
           New-Item -ItemType Directory -Force -Path $destination | Out-Null
           Copy-Item $env:SIGNED_MANIFEST_PATH "$destination/stable.json" -Force
+      - name: Preserve all Boreal channels in Pages source
+        shell: pwsh
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- "site/channels/$env:PROFILE_EVENT_ID/stable.json"
+          if (-not (git diff --cached --quiet)) {
+            git commit -m "Publish $env:PROFILE_EVENT_ID profile channel"
+            git push origin "HEAD:$env:DEFAULT_BRANCH"
+          }
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
