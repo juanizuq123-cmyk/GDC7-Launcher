@@ -2,7 +2,6 @@
 
 const fs = require('node:fs/promises');
 const path = require('node:path');
-const { createHash, randomUUID } = require('node:crypto');
 const { spawn } = require('node:child_process');
 const { EventEmitter } = require('node:events');
 const { safeRoot, safeParent, verifyFile, check } = require('./file-safety.cjs');
@@ -42,7 +41,6 @@ class PrismError extends Error {
       UNSUPPORTED: 'La integración con Prism requiere Windows x64.',
       ENGINE: 'No se pudo comprobar o preparar la copia oficial de Prism.',
       PROFILE: 'No se pudo preparar la carpeta segura de Prism.',
-      ACCOUNT: 'Ese nombre ya está asociado a otra cuenta de Prism. Probá con otro nickname.',
       INSTANCE: 'Primero instalá el perfil GDC7 desde Prism.',
       BOREAL_INSTANCE: 'Primero instalá el perfil verificado de Estación Boreal desde el launcher.',
       CONSTRUCTOR_INSTANCE: 'Primero instalá Boreal Constructor desde el launcher.',
@@ -67,7 +65,7 @@ function accountArguments(dataRoot) {
   return ['--dir', dataRoot, '--show-window'];
 }
 
-function prismArguments(dataRoot, action, value, profileName) {
+function prismArguments(dataRoot, action, value, offlineNickname) {
   if (typeof dataRoot !== 'string' || !path.isAbsolute(dataRoot) || /[\x00-\x1f]/.test(dataRoot)) throw new PrismError('PROFILE');
   if (action === 'accounts') return accountArguments(dataRoot);
   if (action === 'import') {
@@ -77,56 +75,13 @@ function prismArguments(dataRoot, action, value, profileName) {
   if (action === 'launch') {
     if (typeof value !== 'string' || !/^[^\\/\x00-\x1f]{1,100}$/.test(value)) throw new PrismError('PROFILE');
     const args = ['--dir', dataRoot, '--launch', value];
-    if (profileName !== undefined) {
-      if (typeof profileName !== 'string' || !/^[A-Za-z0-9_]{3,16}$/.test(profileName)) throw new PrismError('PROFILE');
-      args.push('--profile', profileName);
+    if (offlineNickname !== undefined) {
+      if (typeof offlineNickname !== 'string' || !/^[A-Za-z0-9_]{3,16}$/.test(offlineNickname)) throw new PrismError('PROFILE');
+      args.push('--offline', offlineNickname);
     }
     return args;
   }
   throw new PrismError('PROFILE');
-}
-
-function offlineUuid(username) {
-  const digest = createHash('md5').update(`OfflinePlayer:${username}`, 'utf8').digest();
-  digest[6] = (digest[6] & 0x0f) | 0x30;
-  digest[8] = (digest[8] & 0x3f) | 0x80;
-  return digest.toString('hex');
-}
-
-async function ensureOfflineAccount(dataRoot, nickname) {
-  if (typeof nickname !== 'string' || !/^[A-Za-z0-9_]{3,16}$/.test(nickname)) throw new PrismError('ACCOUNT');
-
-  let data;
-  try {
-    const file = await readPath(dataRoot, 'accounts.json');
-    const stat = await fs.lstat(file);
-    if (stat.size > 1024 * 1024) throw new PrismError('PROFILE');
-    data = JSON.parse(await fs.readFile(file, 'utf8'));
-  } catch (error) {
-    if (error.code !== 'ENOENT') throw error instanceof PrismError ? error : new PrismError('PROFILE');
-    data = { formatVersion: 3, accounts: [] };
-  }
-
-  if (data.formatVersion !== 3 || !Array.isArray(data.accounts)) throw new PrismError('PROFILE');
-  const sameName = account => account?.profile?.name?.toLowerCase() === nickname.toLowerCase();
-  const matching = data.accounts.filter(sameName);
-  if (matching.length === 1 && matching[0].type === 'Offline') return;
-  if (matching.length) throw new PrismError('ACCOUNT');
-
-  data.accounts.push({
-    type: 'Offline',
-    ygg: {
-      token: '0',
-      extra: { userName: nickname, clientToken: randomUUID().replaceAll('-', '') }
-    },
-    profile: {
-      id: offlineUuid(nickname),
-      name: nickname,
-      skin: { id: '', url: '', variant: '' },
-      capes: []
-    }
-  });
-  await publishBytes(dataRoot, 'accounts.json', Buffer.from(`${JSON.stringify(data, null, 2)}\n`));
 }
 
 function patchPrismConfig(text, values = PROVIDER_SETTINGS) {
@@ -235,25 +190,21 @@ class PrismAccountBridge extends EventEmitter {
     if (this.active) throw new PrismError('BUSY');
     const profile = await this.findClientProfile();
     if (!profile) throw new PrismError('INSTANCE');
-    if (offlineNickname !== null) {
-      const dataRoot = await this.configure(this.userData);
-      await ensureOfflineAccount(dataRoot, offlineNickname);
-    }
     return this.begin('launch', profile.instanceId, offlineNickname ? CLIENT_PACK.eventId : undefined, offlineNickname || undefined);
   }
 
-  async launchBorealClientProfile() {
+  async launchBorealClientProfile(offlineNickname = null) {
     if (this.active) throw new PrismError('BUSY');
     const profile = await this.findBorealProfile();
     if (!profile) throw new PrismError('BOREAL_INSTANCE');
-    return this.begin('launch', profile.instanceId, BOREAL_PROFILE.eventId);
+    return this.begin('launch', profile.instanceId, BOREAL_PROFILE.eventId, offlineNickname || undefined);
   }
 
-  async launchBorealConstructorProfile() {
+  async launchBorealConstructorProfile(offlineNickname = null) {
     if (this.active) throw new PrismError('BUSY');
     const profile = await this.findBorealConstructorProfile();
     if (!profile) throw new PrismError('CONSTRUCTOR_INSTANCE');
-    return this.begin('launch', profile.instanceId, CONSTRUCTOR_PROFILE.eventId);
+    return this.begin('launch', profile.instanceId, CONSTRUCTOR_PROFILE.eventId, offlineNickname || undefined);
   }
 
   async findClientProfile() {
@@ -370,7 +321,7 @@ class PrismAccountBridge extends EventEmitter {
     return this.configure(this.userData);
   }
 
-  begin(mode, value, eventId, profileName) {
+  begin(mode, value, eventId, offlineNickname) {
     if (this.active) throw new PrismError('BUSY');
     const support = supportsPrismAccounts(this.platform, this.arch);
     if (!support.supported) throw new PrismError('UNSUPPORTED');
@@ -379,11 +330,11 @@ class PrismAccountBridge extends EventEmitter {
     this.active = true;
     this.state = { status: 'preparing', error: null, pid: null, mode, ...(eventId ? { eventId } : {}) };
     this.emitState();
-    this.completion = this.run(mode, value, eventId, profileName);
+    this.completion = this.run(mode, value, eventId, offlineNickname);
     return this.snapshot();
   }
 
-  async run(mode, value, eventId, profileName) {
+  async run(mode, value, eventId, offlineNickname) {
     const eventState = eventId ? { eventId } : {};
     try {
       const engine = await this.prepareEngine(this.userData, this.bundledDirectory);
@@ -403,8 +354,8 @@ class PrismAccountBridge extends EventEmitter {
         const pack = await fs.lstat(selectedPack);
         if (!pack.isFile() || pack.isSymbolicLink() || pack.nlink !== 1) throw new PrismError('PACK');
       }
-      const args = mode === 'launch' && profileName
-        ? prismArguments(dataRoot, mode, value, profileName)
+      const args = mode === 'launch' && offlineNickname
+        ? prismArguments(dataRoot, mode, value, offlineNickname)
         : prismArguments(dataRoot, mode, mode === 'import' ? selectedPack : value);
       const child = this.spawnProcess(engine.executable, args, {
         cwd: engine.engine,

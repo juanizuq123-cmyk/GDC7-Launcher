@@ -173,20 +173,20 @@ function registerHandlers() {
     const pack = await borealProfileUpdater.installPackPath();
     return prism.importBorealClientPack(pack);
   });
-  register('launcher:boreal-profile-play', () => {
+  register('launcher:boreal-profile-play', nickname => {
     if (store.snapshot().selectedEventId !== BOREAL_PROFILE.eventId) throw new Error('Seleccioná Estación Boreal para iniciar este perfil.');
     if (!installedBorealProfile) throw new Error('El perfil de Estación Boreal todavía no está instalado.');
-    return prism.launchBorealClientProfile();
+    return prism.launchBorealClientProfile(nickname || null);
   });
   register('launcher:boreal-constructor-install', async () => {
     if (store.snapshot().selectedEventId !== CONSTRUCTOR_PROFILE.eventId) throw new Error('Seleccioná Boreal Constructor para instalar este perfil.');
     if (!constructorProfileUpdater) throw new Error('No se pudo verificar Boreal Constructor.');
     return prism.importBorealConstructorPack(await constructorProfileUpdater.installPackPath());
   });
-  register('launcher:boreal-constructor-play', () => {
+  register('launcher:boreal-constructor-play', nickname => {
     if (store.snapshot().selectedEventId !== CONSTRUCTOR_PROFILE.eventId) throw new Error('Seleccioná Boreal Constructor para iniciar este perfil.');
     if (!installedConstructorProfile) throw new Error('Primero instalá Boreal Constructor desde el launcher.');
-    return prism.launchBorealConstructorProfile();
+    return prism.launchBorealConstructorProfile(nickname || null);
   });
   register('launcher:check-updates', async () => {
     const appState = launcherUpdater ? await launcherUpdater.check() : launcherUpdateState;

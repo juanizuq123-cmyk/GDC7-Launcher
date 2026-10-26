@@ -33,7 +33,7 @@ contextBridge.exposeInMainWorld('launcher', Object.freeze({
   installBorealProfile: () => invoke('launcher:boreal-profile-install'),
   playBorealProfile: nickname => invoke('launcher:boreal-profile-play', nickname),
   installBorealConstructorProfile: () => invoke('launcher:boreal-constructor-install'),
-  playBorealConstructorProfile: () => invoke('launcher:boreal-constructor-play'),
+  playBorealConstructorProfile: nickname => invoke('launcher:boreal-constructor-play', nickname),
   checkUpdates: () => invoke('launcher:check-updates'),
   copyDiagnostics: () => invoke('launcher:copy-diagnostics'),
   window: action => invoke('launcher:window', action),

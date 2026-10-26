@@ -309,8 +309,9 @@
 
   function prismStatusText(prism) {
     if (prism.status === 'preparing') return 'Comprobando y preparando la copia oficial de Prism…';
+    if (prism.status === 'running' && prism.mode === 'import' && prism.eventId === 'estacion-boreal') return 'Prism está importando Estación Boreal. Si aparece el aviso del mod personalizado, confirmá que confiás en el pack firmado y esperá a que termine la instalación; después cerrá Prism.';
     if (prism.status === 'running' && prism.mode === 'import') return 'Prism está importando el pack. Confirmá la instancia y cerrá Prism al terminar.';
-    if (prism.status === 'running' && prism.mode === 'launch') return 'Prism abrió el perfil de Minecraft con la cuenta que elegiste allí.';
+    if (prism.status === 'running' && prism.mode === 'launch') return offlineNickname ? `Prism inició el perfil con el nombre local ${offlineNickname}.` : 'Prism abrió el perfil de Minecraft con la cuenta que elegiste allí.';
     if (prism.status === 'running') return 'Iniciá sesión con tu cuenta Premium de Microsoft en Prism y cerralo al terminar.';
     if (prism.status === 'closed' && prism.mode === 'import') return 'Prism se cerró. El launcher volverá a buscar el perfil importado.';
     if (prism.status === 'closed' && prism.mode === 'launch') return 'Prism se cerró. El perfil GDC7 sigue guardado en su instancia aislada.';
@@ -428,11 +429,11 @@
       if (selected.id === 'estacion-boreal') {
         const update = state.borealProfileUpdate;
         const needsInstall = !selected.borealProfile?.installed || update?.status === 'ready-to-install' && update.latestVersion !== selected.borealProfile?.version;
-        void act(() => needsInstall ? window.launcher.installBorealProfile() : window.launcher.playBorealProfile());
+        void act(() => needsInstall ? window.launcher.installBorealProfile() : window.launcher.playBorealProfile(offlineNickname || null));
         return;
       }
       if (selected.id === 'boreal-constructor') {
-        void act(() => selected.constructorProfile?.installed ? window.launcher.playBorealConstructorProfile() : window.launcher.installBorealConstructorProfile());
+        void act(() => selected.constructorProfile?.installed ? window.launcher.playBorealConstructorProfile(offlineNickname || null) : window.launcher.installBorealConstructorProfile());
         return;
       }
       if (selected.id !== 'gdc7') return;
