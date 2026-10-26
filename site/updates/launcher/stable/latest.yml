@@ -1,8 +1,8 @@
-version: 0.1.6
+version: 0.1.7
 files:
-  - url: https://github.com/juanizuq123-cmyk/GDC7-Launcher/releases/download/launcher-v0.1.6/GDC7-Launcher-0.1.6-x64-setup.exe
-    sha512: miHBsNnECED9n+C+jObQkFM97iOSAZclKM1Unzp+rBSeqeDPTgKIFzZctfMBrfeH4ERL0tY2xQSxiAEkIangpw==
-    size: 173951120
-path: GDC7-Launcher-0.1.6-x64-setup.exe
-sha512: miHBsNnECED9n+C+jObQkFM97iOSAZclKM1Unzp+rBSeqeDPTgKIFzZctfMBrfeH4ERL0tY2xQSxiAEkIangpw==
-releaseDate: 2026-10-24T21:49:59.576Z
+  - url: https://github.com/juanizuq123-cmyk/GDC7-Launcher/releases/download/launcher-v0.1.7/GDC7-Launcher-0.1.7-x64-setup.exe
+    sha512: ufSPsQZb9iYScHW2cBlcJkZonvVR/Ik+7twSu1xRoHbAUH63uFK3wTr7iXPvmLvq3sguIrzxLRjEbibYgVx/HQ==
+    size: 173951768
+path: GDC7-Launcher-0.1.7-x64-setup.exe
+sha512: ufSPsQZb9iYScHW2cBlcJkZonvVR/Ik+7twSu1xRoHbAUH63uFK3wTr7iXPvmLvq3sguIrzxLRjEbibYgVx/HQ==
+releaseDate: 2026-10-26T03:54:16.755Z
