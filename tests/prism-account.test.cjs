@@ -4,7 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const os = require('node:os');
 const path = require('node:path');
-const { PRISM, accountArguments, prismArguments, patchPrismConfig, supportsPrismAccounts, PrismAccountBridge } = require('../prism-account.cjs');
+const { PRISM, accountArguments, prismArguments, patchPrismConfig, supportsPrismAccounts, PrismAccountBridge, ensurePrism } = require('../prism-account.cjs');
 const { CLIENT_PACK } = require('../client-pack.cjs');
 const { BOREAL_PROFILE } = require('../boreal-profile.cjs');
 
@@ -13,6 +13,14 @@ test('Prism account bridge uses the official bundle already audited in the old l
   assert.equal(PRISM.archive, 'PrismLauncher-Windows-MinGW-w64-Portable-11.1.1.zip');
   assert.equal(PRISM.size, 43687692);
   assert.equal(PRISM.sha256, '05841d0b3bfc0a8212658457cc6035e1c29cd7ffae919464e874e384cbe8d062');
+});
+
+test('Prism prepares its verified executable in a clean data directory', async t => {
+  const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'gdc7-prism-engine-'));
+  t.after(() => fs.rm(temp, { recursive: true, force: true }));
+  const result = await ensurePrism(temp, path.join(__dirname, '..', 'provider', 'prism'));
+  assert.equal(path.basename(result.executable), 'prismlauncher.exe');
+  assert.equal((await fs.stat(result.executable)).isFile(), true);
 });
 
 test('Prism CLI keeps account, import, and launch actions scoped to the isolated data root', () => {
@@ -56,7 +64,7 @@ test('Prism discovers the newest Boreal profile release without crossing into GD
   t.after(() => fs.rm(temp, { recursive: true, force: true }));
   const dataRoot = path.join(temp, 'data');
   for (const [instance, version] of [['Estación Boreal 0.1.0', '0.1.0'], ['Estación Boreal 0.2.0', '0.2.0']]) {
-    const file = path.join(dataRoot, 'instances', instance, '.minecraft', BOREAL_PROFILE.markerFile);
+    const file = path.join(dataRoot, 'instances', instance, 'minecraft', BOREAL_PROFILE.markerFile);
     await fs.mkdir(path.dirname(file), { recursive: true });
     await fs.writeFile(file, JSON.stringify({
       schema: 1, eventId: BOREAL_PROFILE.eventId, profileId: BOREAL_PROFILE.id,
@@ -68,6 +76,7 @@ test('Prism discovers the newest Boreal profile release without crossing into GD
   const found = await bridge.findBorealProfile();
   assert.equal(found.instanceId, 'Estación Boreal 0.2.0');
   assert.equal(found.profileRelease, '0.2.0');
+  assert.equal(found.minecraftPath, path.join(dataRoot, 'instances', 'Estación Boreal 0.2.0', 'minecraft'));
   assert.equal(await bridge.findClientProfile(), null);
 });
 
@@ -75,7 +84,7 @@ test('Boreal launch delegates to the selected authenticated Prism account and ig
   const bridge = new PrismAccountBridge({ userData: 'C:\\BorealTest' });
   bridge.findBorealProfile = async () => ({ instanceId: 'Estación Boreal 0.1.0' });
   bridge.begin = (...args) => args;
-  assert.deepEqual(await bridge.launchBorealClientProfile(), ['launch', 'Estación Boreal 0.1.0', BOREAL_PROFILE.eventId]);
+  assert.deepEqual(await bridge.launchBorealClientProfile(), ['launch', 'Estación Boreal 0.1.0', BOREAL_PROFILE.eventId, undefined]);
 });
 
 test('Prism imports, finds, and launches Boreal Constructor in its own authenticated instance', async t => {
@@ -91,7 +100,7 @@ test('Prism imports, finds, and launches Boreal Constructor in its own authentic
   assert.equal((await bridge.findBorealConstructorProfile())?.instanceId, instance);
   bridge.begin = (...args) => args;
   assert.deepEqual(bridge.importBorealConstructorPack('constructor.mrpack'), ['import', 'constructor.mrpack', 'boreal-constructor']);
-  assert.deepEqual(await bridge.launchBorealConstructorProfile(), ['launch', instance, 'boreal-constructor']);
+  assert.deepEqual(await bridge.launchBorealConstructorProfile(), ['launch', instance, 'boreal-constructor', undefined]);
 });
 
 test('Prism config updates only launcher-owned general settings and preserves other sections', () => {

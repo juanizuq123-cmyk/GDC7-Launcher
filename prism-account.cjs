@@ -2,6 +2,7 @@
 
 const fs = require('node:fs/promises');
 const path = require('node:path');
+const { randomUUID } = require('node:crypto');
 const { spawn } = require('node:child_process');
 const { EventEmitter } = require('node:events');
 const { safeRoot, safeParent, verifyFile, check } = require('./file-safety.cjs');
@@ -47,7 +48,8 @@ class PrismError extends Error {
       PACK: 'El paquete del perfil no está disponible en una carpeta segura.',
       SPAWN: 'Windows no pudo abrir Prism. Revisá permisos y antivirus.',
       EXIT: 'Prism terminó con un error. Consultá el mensaje que mostró la aplicación.',
-      IMPORT_TIMEOUT: 'Prism no confirmó la instalación de Boreal. Dejá terminar la importación y volvé a intentarlo.'
+      BOREAL_IMPORT_EXIT: 'Prism no pudo completar la importación de Estación Boreal. Revisá si falló una descarga, volvé a intentarlo y dejá Prism abierto hasta que termine.',
+      IMPORT_TIMEOUT: 'Prism no confirmó la instalación de Boreal. Completá la configuración inicial si aparece, confirmá el aviso del mod borealexpedition y esperá a que termine la importación antes de cerrar Prism.'
     };
     super(messages[code] || messages.ENGINE);
     this.code = Object.hasOwn(messages, code) ? code : 'ENGINE';
@@ -247,6 +249,7 @@ class PrismAccountBridge extends EventEmitter {
     for (const entry of entries) {
       if (!entry.isDirectory() || entry.isSymbolicLink() || /[\\/\x00-\x1f]/.test(entry.name)) continue;
       for (const relative of [
+        `instances/${entry.name}/minecraft/${BOREAL_PROFILE.markerFile}`,
         `instances/${entry.name}/.minecraft/${BOREAL_PROFILE.markerFile}`,
         `instances/${entry.name}/${BOREAL_PROFILE.markerFile}`
       ]) {
@@ -256,7 +259,10 @@ class PrismAccountBridge extends EventEmitter {
           const version = marker.profileRelease || marker.version;
           if (marker.schema === 1 && marker.eventId === BOREAL_PROFILE.eventId && marker.profileId === BOREAL_PROFILE.id && typeof version === 'string' && /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(version) && marker.minecraft === BOREAL_PROFILE.minecraft && marker.loader === BOREAL_PROFILE.loaderVersion) {
             const instancePath = path.join(instances, entry.name);
-            matches.push({ instanceId: entry.name, path: instancePath, minecraftPath: path.join(instancePath, '.minecraft'), profileRelease: version });
+            const minecraftPath = relative.startsWith(`instances/${entry.name}/minecraft/`)
+              ? path.join(instancePath, 'minecraft')
+              : path.join(instancePath, '.minecraft');
+            matches.push({ instanceId: entry.name, path: instancePath, minecraftPath, profileRelease: version });
           }
         } catch (error) { if (error.code !== 'ENOENT') continue; }
       }
@@ -374,7 +380,10 @@ class PrismAccountBridge extends EventEmitter {
       this.state = { status: 'running', error: null, pid: Number.isInteger(child.pid) ? child.pid : null, mode, ...eventState };
       this.emitState();
       const result = await closed;
-      if (result.code !== 0 || result.signal) this.state = { status: 'error', error: new PrismError('EXIT').message, pid: null, mode, ...eventState };
+      if (result.code !== 0 || result.signal) {
+        const errorCode = mode === 'import' && eventId === BOREAL_PROFILE.eventId ? 'BOREAL_IMPORT_EXIT' : 'EXIT';
+        this.state = { status: 'error', error: new PrismError(errorCode).message, pid: null, mode, ...eventState };
+      }
       else if (mode === 'import' && [BOREAL_PROFILE.eventId, CONSTRUCTOR_PROFILE.eventId].includes(eventId)) {
         this.state = { status: 'running', error: null, pid: null, mode, ...eventState };
         this.emitState();

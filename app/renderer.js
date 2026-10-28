@@ -161,7 +161,7 @@
     const profileBusy = ['checking', 'downloading', 'recovering', 'applying'].includes(selectedUpdate?.status);
     const borealUnavailable = (isBoreal || isConstructor) && !profileInstalled && !profileReady;
     playButton.disabled = prismBusy || profileBusy || borealUnavailable;
-    playButton.querySelector('span').textContent = prismBusy ? 'Prism está abierto' : profileBusy ? 'Verificando perfil' : isConstructor
+    playButton.querySelector('span').textContent = prismBusy ? state.prism.status === 'preparing' && isBoreal ? 'Preparando Prism…' : 'Prism está abierto' : profileBusy ? 'Verificando perfil' : isConstructor
       ? profileInstalled ? 'Jugar Boreal Constructor' : profileReady ? 'Instalar Boreal Constructor' : 'Perfil no disponible'
       : isBoreal
         ? profileInstalled ? borealUpdateAvailable ? 'Actualizar Estación Boreal' : 'Jugar Estación Boreal' : profileReady ? 'Instalar Estación Boreal' : 'Perfil no disponible'
@@ -188,6 +188,10 @@
           : prismBusy
           ? 'Cerrá Prism para volver al launcher y continuar.'
           : 'La primera vez se abre el importador de Prism; confirmá la instancia. El perfil fija Minecraft 26.1.2, NeoForge 26.1.2.95 y Java 25. El mod de gameplay GDC7 y el servidor no se incluyen.';
+    if (isBoreal && state.prism?.mode === 'import' && state.prism?.eventId === 'estacion-boreal') {
+      if (state.prism.status === 'running') $('#play-reason').textContent = 'Si Prism muestra su configuración inicial, completala. Confirmá que confiás en borealexpedition-0.1.0.jar y esperá a que termine la importación y las descargas antes de cerrar Prism.';
+      else if (state.prism.status === 'error') $('#play-reason').textContent = state.prism.error || 'No se pudo importar Estación Boreal. Revisá Prism y tu conexión antes de volver a intentar.';
+    }
     $('#install-readout-title').textContent = isConstructor
       ? profileInstalled ? 'Boreal Constructor instalado' : profileReady ? 'Instalar Boreal Constructor' : 'Boreal Constructor no disponible'
       : isBoreal
@@ -309,7 +313,7 @@
 
   function prismStatusText(prism) {
     if (prism.status === 'preparing') return 'Comprobando y preparando la copia oficial de Prism…';
-    if (prism.status === 'running' && prism.mode === 'import' && prism.eventId === 'estacion-boreal') return 'Prism está importando Estación Boreal. Si aparece el aviso del mod personalizado, confirmá que confiás en el pack firmado y esperá a que termine la instalación; después cerrá Prism.';
+    if (prism.status === 'running' && prism.mode === 'import' && prism.eventId === 'estacion-boreal') return 'Si es la primera vez, completá la configuración inicial de Prism. Confirmá el aviso de borealexpedition y dejá que termine la importación antes de cerrar Prism.';
     if (prism.status === 'running' && prism.mode === 'import') return 'Prism está importando el pack. Confirmá la instancia y cerrá Prism al terminar.';
     if (prism.status === 'running' && prism.mode === 'launch') return offlineNickname ? `Prism inició el perfil con el nombre local ${offlineNickname}.` : 'Prism abrió el perfil de Minecraft con la cuenta que elegiste allí.';
     if (prism.status === 'running') return 'Iniciá sesión con tu cuenta Premium de Microsoft en Prism y cerralo al terminar.';
