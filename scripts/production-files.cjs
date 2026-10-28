@@ -8,6 +8,6 @@ module.exports = {
     'profile-update.cjs', 'gdc7-profile-updater.cjs', 'update-http.cjs', 'update-signature.cjs', 'update-keys.cjs',
     'app', 'provider/prism', 'provider/packs', 'client-pack.cjs',
     'pack/source/gdc7-client-26.1.2-neoforge-v0.3.0.json',
-    'pack/source/boreal-constructor-26.1.2-neoforge-v0.1.0.json'
+    'pack/source/boreal-constructor-26.1.2-neoforge-v0.2.4.json'
   ]
 };

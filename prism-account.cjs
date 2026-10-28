@@ -282,6 +282,7 @@ class PrismAccountBridge extends EventEmitter {
     for (const entry of entries) {
       if (!entry.isDirectory() || entry.isSymbolicLink() || /[\\/\x00-\x1f]/.test(entry.name)) continue;
       for (const relative of [
+        `instances/${entry.name}/minecraft/${CONSTRUCTOR_PROFILE.markerFile}`,
         `instances/${entry.name}/.minecraft/${CONSTRUCTOR_PROFILE.markerFile}`,
         `instances/${entry.name}/${CONSTRUCTOR_PROFILE.markerFile}`
       ]) {
@@ -291,7 +292,8 @@ class PrismAccountBridge extends EventEmitter {
           const version = marker.profileRelease || marker.version;
           if (marker.schema === 1 && marker.eventId === CONSTRUCTOR_PROFILE.eventId && marker.profileId === CONSTRUCTOR_PROFILE.id && typeof version === 'string' && /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/.test(version) && marker.minecraft === CONSTRUCTOR_PROFILE.minecraft && marker.loader === CONSTRUCTOR_PROFILE.loaderVersion) {
             const instancePath = path.join(instances, entry.name);
-            matches.push({ instanceId: entry.name, path: instancePath, minecraftPath: path.join(instancePath, '.minecraft'), profileRelease: version });
+            const minecraftPath = relative.startsWith(`instances/${entry.name}/minecraft/`) ? path.join(instancePath, 'minecraft') : path.join(instancePath, '.minecraft');
+            matches.push({ instanceId: entry.name, path: instancePath, minecraftPath, profileRelease: version });
           }
         } catch (error) { if (error.code !== 'ENOENT') continue; }
       }

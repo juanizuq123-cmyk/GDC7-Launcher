@@ -12,7 +12,7 @@ module.exports = {
     'package.json', '*.cjs', 'auth-config.json', 'boreal-channel-config.json', 'app/**/*',
     'provider/prism/**/*', 'provider/packs/**/*',
     'pack/source/gdc7-client-26.1.2-neoforge-v0.3.0.json',
-    'pack/source/boreal-constructor-26.1.2-neoforge-v0.1.0.json',
+    'pack/source/boreal-constructor-26.1.2-neoforge-v0.2.4.json',
     '!electron-builder.config.cjs', '!tests/**', '!scripts/**', '!docs/**', '!work/**', '!dist/**', '!build-tools/**', '!node_modules/electron-builder/**'
   ],
   extraResources: [{ from: 'work/installer-resources/launcher-install-mode.json', to: 'launcher-install-mode.json' }],

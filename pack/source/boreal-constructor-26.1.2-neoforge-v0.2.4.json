@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "profileType": "construction",
+  "eventId": "boreal-constructor",
+  "id": "boreal-constructor-neoforge-client",
+  "version": "0.2.4",
+  "auditedOn": "2026-10-27",
+  "target": {
+    "minecraft": "26.1.2",
+    "loader": "neoforge",
+    "loaderVersion": "26.1.2.95",
+    "javaMajor": 25,
+    "installSide": "client"
+  },
+  "mods": [
+    {
+      "modId": "borealexpedition",
+      "name": "Estación Boreal",
+      "version": "0.2.4",
+      "projectSide": {
+        "client": "required",
+        "server": "required"
+      },
+      "dependencies": [
+        {
+          "modId": "minecraft",
+          "versionRange": "[26.1.2]",
+          "side": "BOTH"
+        },
+        {
+          "modId": "neoforge",
+          "versionRange": "[26.1.2.95,)",
+          "side": "BOTH"
+        }
+      ],
+      "file": {
+        "filename": "borealexpedition-0.2.4.jar",
+        "source": "C:/Minecraft/EstacionBoreal/build/libs/borealexpedition-0.2.4.jar",
+        "size": 9080548,
+        "sha256": "72b6afc07479de6784bd155ea9c80574017c3460371a9d4a6f409b198f5486cd"
+      }
+    },
+    {
+      "modId": "worldedit",
+      "name": "WorldEdit",
+      "version": "7.4.3-beta-01+80c6d6122",
+      "requestedRelease": "7.4.3-beta-01",
+      "projectSide": {
+        "client": "required",
+        "server": "required"
+      },
+      "dependencies": [
+        {
+          "modId": "minecraft",
+          "versionRange": "[26.1,26.2)",
+          "side": "BOTH"
+        },
+        {
+          "modId": "neoforge",
+          "versionRange": "[26.1.0.15-beta,)",
+          "side": "BOTH"
+        }
+      ],
+      "modrinth": {
+        "projectId": "1u6JkXh5",
+        "versionId": "DjiTrN5B",
+        "supportedGameVersions": [
+          "26.1",
+          "26.1.1",
+          "26.1.2"
+        ],
+        "supportedLoaders": [
+          "fabric",
+          "neoforge"
+        ],
+        "supportedEnvironments": [
+          "server-side",
+          "singleplayer"
+        ],
+        "requiredDependencies": [],
+        "license": "GPLv3",
+        "officialFileSha512": "a84f894c7d8ccc63aaa34a3d183fd7a8cf3cf80bcec7b00885bd1783b084519cbdfd64b645a4389553a7bec5d5eaf3c4b51dc18b4c1b943d7cc7e7e2eec792c2"
+      },
+      "file": {
+        "filename": "worldedit-mod-7.4.3-beta-01.jar",
+        "source": "https://cdn.modrinth.com/data/1u6JkXh5/versions/DjiTrN5B/worldedit-mod-7.4.3-beta-01.jar",
+        "size": 5398033,
+        "sha256": "4c100499a87ca532a15135cd8349e6bdcc66498e1ff1ade3df8e332cdf95ceaa",
+        "sha512": "a84f894c7d8ccc63aaa34a3d183fd7a8cf3cf80bcec7b00885bd1783b084519cbdfd64b645a4389553a7bec5d5eaf3c4b51dc18b4c1b943d7cc7e7e2eec792c2"
+      }
+    }
+  ],
+  "pack": {
+    "filename": "Boreal-Constructor-Client-0.2.4.mrpack",
+    "size": 14076752,
+    "sha256": "aef1100dbadd218b544e6c2e81a7fd2b9a452114ce0dafb15f34d446d2e7ddc0",
+    "minecraft": "26.1.2",
+    "neoforge": "26.1.2.95"
+  },
+  "eventPackContainsWorldEdit": false,
+  "verification": {
+    "officialModrinthVersionConfirmed": true,
+    "worldEditLoaderMetadataConfirmed": true,
+    "worldEditGameVersionRangeConfirmed": true,
+    "requiredDependencyClosureConfirmed": true,
+    "gdc7GameplayModIncluded": false,
+    "serverOnlyFilesIncludedInClientPack": false,
+    "testedInMinecraft": false
+  }
+}

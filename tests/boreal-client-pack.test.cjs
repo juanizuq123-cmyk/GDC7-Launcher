@@ -12,7 +12,7 @@ const { BOREAL_PROFILE } = require('../boreal-profile.cjs');
 test('bundled Boreal pack matches the project manifest and contains only the client profile files', async t => {
   const root = path.join(__dirname, '..');
   const packPath = path.join(root, 'provider', 'packs', BOREAL_PROFILE.packFile);
-  const manifestPath = path.join(root, 'pack', 'source', 'estacion-boreal-26.1.2-neoforge-v0.1.0.json');
+  const manifestPath = path.join(root, 'pack', 'source', 'estacion-boreal-26.1.2-neoforge-v0.2.4.json');
   const audit = JSON.parse(await fs.readFile(manifestPath, 'utf8'));
   const packBytes = await fs.readFile(packPath);
   assert.equal(packBytes.length, BOREAL_PROFILE.packSize);
@@ -45,6 +45,7 @@ test('bundled Boreal pack matches the project manifest and contains only the cli
   assert.equal(marker.profileId, BOREAL_PROFILE.id);
   assert.equal(marker.version, BOREAL_PROFILE.version);
   assert.equal(marker.modId, BOREAL_PROFILE.modId);
+  assert.equal(marker.modSha256, BOREAL_PROFILE.modSha256);
 
   const jarPath = path.join(temp, 'overrides', 'mods', BOREAL_PROFILE.modFile);
   const jarBytes = await fs.readFile(jarPath);
@@ -60,7 +61,7 @@ test('bundled Boreal pack matches the project manifest and contains only the cli
   });
   const metadata = await fs.readFile(path.join(jarMetadataDir, 'META-INF', 'neoforge.mods.toml'), 'utf8');
   assert.match(metadata, /modId="borealexpedition"/);
-  assert.match(metadata, /version="0\.1\.0"/);
+  assert.match(metadata, /version="0\.2\.4"/);
   assert.match(metadata, /versionRange="\[26\.1\.2\.95,\)"/);
   assert.match(metadata, /versionRange="\[26\.1\.2\]"/);
   assert.doesNotMatch(metadata, /modId="gdc7"/);

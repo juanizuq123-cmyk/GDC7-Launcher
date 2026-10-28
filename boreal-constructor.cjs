@@ -11,7 +11,7 @@ const CONSTRUCTOR_PROFILE = Object.freeze({
   eventId: 'boreal-constructor',
   id: 'boreal-constructor-neoforge-client',
   name: 'Boreal Constructor',
-  version: '0.1.0',
+  version: '0.2.4',
   minecraft: '26.1.2',
   loader: 'NeoForge 26.1.2.95',
   loaderId: 'neoforge',
@@ -19,17 +19,17 @@ const CONSTRUCTOR_PROFILE = Object.freeze({
   javaMajor: 25,
   modCount: 2,
   mods: Object.freeze([
-    Object.freeze({ id: 'borealexpedition', version: '0.1.0', file: 'borealexpedition-0.1.0.jar' }),
+    Object.freeze({ id: 'borealexpedition', version: '0.2.4', file: 'borealexpedition-0.2.4.jar' }),
     Object.freeze({ id: 'worldedit', version: '7.4.3-beta-01', file: 'worldedit-mod-7.4.3-beta-01.jar' })
   ]),
-  borealModSize: 557049,
-  borealModSha256: '724911bf152710212cfc5f23561cf0467d56aa9882e7a0de2058e7903ad9bc84',
+  borealModSize: 9080548,
+  borealModSha256: '72b6afc07479de6784bd155ea9c80574017c3460371a9d4a6f409b198f5486cd',
   worldeditSize: 5398033,
   worldeditSha256: '4c100499a87ca532a15135cd8349e6bdcc66498e1ff1ade3df8e332cdf95ceaa',
   worldeditSha512: 'a84f894c7d8ccc63aaa34a3d183fd7a8cf3cf80bcec7b00885bd1783b084519cbdfd64b645a4389553a7bec5d5eaf3c4b51dc18b4c1b943d7cc7e7e2eec792c2',
-  packFile: 'Boreal-Constructor-Client-0.1.0.mrpack',
-  packSize: 5567014,
-  packSha256: '51bc5f50147e51d741ddd7d023353d5e87699530b8632ed5729ba5b84c8ea8b0',
+  packFile: 'Boreal-Constructor-Client-0.2.4.mrpack',
+  packSize: 14076752,
+  packSha256: 'aef1100dbadd218b544e6c2e81a7fd2b9a452114ce0dafb15f34d446d2e7ddc0',
   markerFile: 'config/boreal-constructor-launcher-profile.json'
 });
 

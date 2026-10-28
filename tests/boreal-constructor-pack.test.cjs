@@ -11,8 +11,8 @@ const { BOREAL_PROFILE } = require('../boreal-profile.cjs');
 
 test('Boreal Constructor alone includes verified WorldEdit for NeoForge 26.1.2', async t => {
   const root = path.join(__dirname, '..');
-  const packPath = path.join(root, 'provider', 'packs', 'Boreal-Constructor-Client-0.1.0.mrpack');
-  const manifestPath = path.join(root, 'pack', 'source', 'boreal-constructor-26.1.2-neoforge-v0.1.0.json');
+  const packPath = path.join(root, 'provider', 'packs', 'Boreal-Constructor-Client-0.2.4.mrpack');
+  const manifestPath = path.join(root, 'pack', 'source', 'boreal-constructor-26.1.2-neoforge-v0.2.4.json');
   const audit = JSON.parse(await fs.readFile(manifestPath, 'utf8'));
   const packBytes = await fs.readFile(packPath);
   assert.equal(createHash('sha256').update(packBytes).digest('hex'), audit.pack.sha256);
@@ -33,7 +33,7 @@ test('Boreal Constructor alone includes verified WorldEdit for NeoForge 26.1.2',
   assert.deepEqual(names, [
     'modrinth.index.json',
     'overrides/config/boreal-constructor-launcher-profile.json',
-    'overrides/mods/borealexpedition-0.1.0.jar',
+    'overrides/mods/borealexpedition-0.2.4.jar',
     'overrides/mods/worldedit-mod-7.4.3-beta-01.jar'
   ].sort());
   assert.equal(names.some(name => /gdc7|server\.properties|eula\.txt|saves\//i.test(name)), false);
@@ -41,6 +41,11 @@ test('Boreal Constructor alone includes verified WorldEdit for NeoForge 26.1.2',
   const index = JSON.parse(await fs.readFile(path.join(temp, 'modrinth.index.json'), 'utf8'));
   assert.deepEqual(index.dependencies, { minecraft: '26.1.2', neoforge: '26.1.2.95' });
   assert.equal(index.files.length, 0);
+  const borealBytes = await fs.readFile(path.join(temp, 'overrides/mods/borealexpedition-0.2.4.jar'));
+  assert.equal(createHash('sha256').update(borealBytes).digest('hex'), BOREAL_PROFILE.modSha256);
+  const marker = JSON.parse(await fs.readFile(path.join(temp, 'overrides/config/boreal-constructor-launcher-profile.json'), 'utf8'));
+  assert.equal(marker.version, '0.2.4');
+  assert.equal(marker.modSha256, BOREAL_PROFILE.modSha256);
   const worldeditBytes = await fs.readFile(path.join(temp, 'overrides/mods/worldedit-mod-7.4.3-beta-01.jar'));
   assert.equal(worldeditBytes.length, worldedit.file.size);
   assert.equal(createHash('sha512').update(worldeditBytes).digest('hex'), worldedit.file.sha512);

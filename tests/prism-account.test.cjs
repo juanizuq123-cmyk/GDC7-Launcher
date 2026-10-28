@@ -93,7 +93,7 @@ test('Prism imports, finds, and launches Boreal Constructor in its own authentic
   const dataRoot = path.join(temp, 'data');
   const markerFile = 'boreal-constructor-launcher-profile.json';
   const instance = 'Boreal Constructor 0.1.0';
-  const markerPath = path.join(dataRoot, 'instances', instance, '.minecraft', 'config', markerFile);
+  const markerPath = path.join(dataRoot, 'instances', instance, 'minecraft', 'config', markerFile);
   await fs.mkdir(path.dirname(markerPath), { recursive: true });
   await fs.writeFile(markerPath, JSON.stringify({ schema: 1, eventId: 'boreal-constructor', profileId: 'boreal-constructor-neoforge-client', version: '0.1.0', minecraft: '26.1.2', loader: '26.1.2.95' }));
   const bridge = new PrismAccountBridge({ userData: path.join(temp, 'launcher'), configure: async () => dataRoot });

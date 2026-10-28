@@ -35,6 +35,7 @@
   function activeEvent() { return state?.events.find(event => event.id === state.selectedEventId) || state?.events[0]; }
   function statusText(event) {
     if (event.id === 'boreal-constructor') {
+      if (event.constructorProfile?.installed && state?.constructorProfileUpdate?.status === 'ready-to-install' && state.constructorProfileUpdate.latestVersion !== event.constructorProfile.version) return `Boreal Constructor ${state.constructorProfileUpdate.latestVersion} listo para actualizar`;
       if (event.constructorProfile?.installed) return `Boreal Constructor ${event.constructorProfile.version} instalado`;
       if (state?.constructorProfileUpdate?.status === 'ready-to-install') return 'Boreal Constructor listo para instalar';
       return 'Boreal Constructor no disponible';
@@ -123,6 +124,7 @@
     const profileInstalled = Boolean(selectedProfile?.installed);
     const profileReady = selectedUpdate?.status === 'ready-to-install';
     const borealUpdateAvailable = isBoreal && profileInstalled && profileReady && selectedUpdate.latestVersion !== selectedProfile?.version;
+    const constructorUpdateAvailable = isConstructor && profileInstalled && profileReady && selectedUpdate.latestVersion !== selectedProfile?.version;
     $('#home-title').textContent = event.title;
     $('#hero-description').textContent = isConstructor
       ? 'Perfil de construcción independiente con WorldEdit 7.4.3-beta-01 · Minecraft 26.1.2 · NeoForge 26.1.2.95 · Java 25.'
@@ -132,7 +134,7 @@
         : 'Perfil de Estación Boreal no disponible; comprobá el paquete local o el canal firmado.'
       : 'Perfil cliente para Minecraft 26.1.2 · NeoForge 26.1.2.95 · Java 25.';
     $('#hero-status').textContent = isConstructor
-      ? profileInstalled ? 'PERFIL CONSTRUCTOR INSTALADO' : profileReady ? 'PERFIL CONSTRUCTOR DISPONIBLE' : 'PERFIL CONSTRUCTOR NO DISPONIBLE'
+      ? profileInstalled ? constructorUpdateAvailable ? 'ACTUALIZACIÓN CONSTRUCTOR LISTA' : 'PERFIL CONSTRUCTOR INSTALADO' : profileReady ? 'PERFIL CONSTRUCTOR DISPONIBLE' : 'PERFIL CONSTRUCTOR NO DISPONIBLE'
       : isBoreal
       ? profileInstalled ? borealUpdateAvailable ? 'ACTUALIZACIÓN BOREAL LISTA' : 'PERFIL BOREAL INSTALADO' : profileReady ? 'PERFIL BOREAL DISPONIBLE' : 'PERFIL BOREAL NO DISPONIBLE'
       : clientProfile?.installed ? 'PERFIL GDC7 INSTALADO' : 'PERFIL GDC7 DISPONIBLE';
@@ -162,13 +164,15 @@
     const borealUnavailable = (isBoreal || isConstructor) && !profileInstalled && !profileReady;
     playButton.disabled = prismBusy || profileBusy || borealUnavailable;
     playButton.querySelector('span').textContent = prismBusy ? state.prism.status === 'preparing' && isBoreal ? 'Preparando Prism…' : 'Prism está abierto' : profileBusy ? 'Verificando perfil' : isConstructor
-      ? profileInstalled ? 'Jugar Boreal Constructor' : profileReady ? 'Instalar Boreal Constructor' : 'Perfil no disponible'
+      ? profileInstalled ? constructorUpdateAvailable ? 'Actualizar Boreal Constructor' : 'Jugar Boreal Constructor' : profileReady ? 'Instalar Boreal Constructor' : 'Perfil no disponible'
       : isBoreal
         ? profileInstalled ? borealUpdateAvailable ? 'Actualizar Estación Boreal' : 'Jugar Estación Boreal' : profileReady ? 'Instalar Estación Boreal' : 'Perfil no disponible'
         : clientProfile?.installed ? 'Jugar perfil GDC7' : 'Instalar perfil GDC7';
-    playButton.setAttribute('aria-label', isConstructor ? profileInstalled ? 'Jugar Boreal Constructor' : profileReady ? 'Instalar Boreal Constructor' : 'Boreal Constructor no disponible' : isBoreal ? profileInstalled ? borealUpdateAvailable ? 'Actualizar perfil de Estación Boreal' : 'Jugar perfil de Estación Boreal' : profileReady ? 'Instalar perfil de Estación Boreal' : 'Perfil de Estación Boreal no disponible' : clientProfile?.installed ? 'Jugar perfil GDC7' : 'Instalar perfil GDC7');
+    playButton.setAttribute('aria-label', isConstructor ? profileInstalled ? constructorUpdateAvailable ? 'Actualizar Boreal Constructor' : 'Jugar Boreal Constructor' : profileReady ? 'Instalar Boreal Constructor' : 'Boreal Constructor no disponible' : isBoreal ? profileInstalled ? borealUpdateAvailable ? 'Actualizar perfil de Estación Boreal' : 'Jugar perfil de Estación Boreal' : profileReady ? 'Instalar perfil de Estación Boreal' : 'Perfil de Estación Boreal no disponible' : clientProfile?.installed ? 'Jugar perfil GDC7' : 'Instalar perfil GDC7');
     $('#play-reason').textContent = isConstructor
-      ? profileInstalled
+      ? constructorUpdateAvailable
+        ? `La versión ${selectedUpdate.latestVersion} está verificada. Prism importará una instancia Constructor nueva y conservará la anterior.`
+        : profileInstalled
         ? 'Prism inicia la instancia de construcción con WorldEdit. Es una instancia separada; el pack del evento Estación Boreal y GDC7 quedan sin WorldEdit.'
         : profileReady
           ? 'El paquete local Boreal Constructor fue verificado; Prism importará una instancia distinta para construir.'
@@ -189,7 +193,7 @@
           ? 'Cerrá Prism para volver al launcher y continuar.'
           : 'La primera vez se abre el importador de Prism; confirmá la instancia. El perfil fija Minecraft 26.1.2, NeoForge 26.1.2.95 y Java 25. El mod de gameplay GDC7 y el servidor no se incluyen.';
     if (isBoreal && state.prism?.mode === 'import' && state.prism?.eventId === 'estacion-boreal') {
-      if (state.prism.status === 'running') $('#play-reason').textContent = 'Si Prism muestra su configuración inicial, completala. Confirmá que confiás en borealexpedition-0.1.0.jar y esperá a que termine la importación y las descargas antes de cerrar Prism.';
+      if (state.prism.status === 'running') $('#play-reason').textContent = `Si Prism muestra su configuración inicial, completala. Confirmá que confiás en ${borealProfile?.modFile || 'borealexpedition-0.2.4.jar'} y esperá a que termine la importación y las descargas antes de cerrar Prism.`;
       else if (state.prism.status === 'error') $('#play-reason').textContent = state.prism.error || 'No se pudo importar Estación Boreal. Revisá Prism y tu conexión antes de volver a intentar.';
     }
     $('#install-readout-title').textContent = isConstructor
@@ -198,9 +202,9 @@
       ? profileInstalled ? borealUpdateAvailable ? 'Actualizar perfil Boreal' : 'Perfil Boreal instalado' : profileReady ? 'Instalar perfil Boreal' : 'Perfil Boreal no disponible'
       : clientProfile?.installed ? 'Perfil GDC7 instalado' : 'Instalar perfil GDC7';
     $('#install-readout-note').textContent = isConstructor
-      ? 'borealexpedition 0.1.0 + WorldEdit 7.4.3-beta-01 · Minecraft 26.1.2 · NeoForge 26.1.2.95 · Java 25'
+      ? 'borealexpedition 0.2.4 + WorldEdit 7.4.3-beta-01 · Minecraft 26.1.2 · NeoForge 26.1.2.95 · Java 25'
       : isBoreal
-      ? `borealexpedition ${borealProfile?.modVersion || '0.1.0'} · Minecraft ${borealProfile?.minecraft || '26.1.2'} · NeoForge ${borealProfile?.loaderVersion || '26.1.2.95'} · Java ${borealProfile?.javaMajor || 25}`
+      ? `borealexpedition ${borealProfile?.modVersion || '0.2.4'} · Minecraft ${borealProfile?.minecraft || '26.1.2'} · NeoForge ${borealProfile?.loaderVersion || '26.1.2.95'} · Java ${borealProfile?.javaMajor || 25}`
       : '8 mods · Minecraft 26.1.2 · NeoForge 26.1.2.95 · Java 25';
     const profileUpdate = state.profileUpdate || {};
     $('#news-heading').textContent = isConstructor ? 'Boreal Constructor' : isBoreal ? 'Estación Boreal' : 'Actualización GDC7';
@@ -231,7 +235,7 @@
       ['Java', target ? 'Java ' + target.javaMajor : 'No disponible'],
       ['Jugadores', 'No disponible'],
       ['Conexión', 'Sin fuente configurada'],
-      ['Mods', isConstructor ? 'Estación Boreal + WorldEdit 7.4.3-beta-01' : isBoreal ? 'Estación Boreal 0.1.0' : event.manifest ? 'Declarados por manifiesto verificado' : 'No disponibles sin manifiesto']
+      ['Mods', isConstructor ? 'Estación Boreal 0.2.4 + WorldEdit 7.4.3-beta-01' : isBoreal ? 'Estación Boreal 0.2.4' : event.manifest ? 'Declarados por manifiesto verificado' : 'No disponibles sin manifiesto']
     ];
     const intro = isConstructor
       ? 'Perfil de construcción separado para Boreal con WorldEdit 7.4.3-beta-01. Usa Minecraft 26.1.2, NeoForge 26.1.2.95 y Java 25; no altera el pack del evento.'
@@ -437,7 +441,9 @@
         return;
       }
       if (selected.id === 'boreal-constructor') {
-        void act(() => selected.constructorProfile?.installed ? window.launcher.playBorealConstructorProfile(offlineNickname || null) : window.launcher.installBorealConstructorProfile());
+        const update = state.constructorProfileUpdate;
+        const needsInstall = !selected.constructorProfile?.installed || update?.status === 'ready-to-install' && update.latestVersion !== selected.constructorProfile?.version;
+        void act(() => needsInstall ? window.launcher.installBorealConstructorProfile() : window.launcher.playBorealConstructorProfile(offlineNickname || null));
         return;
       }
       if (selected.id !== 'gdc7') return;
